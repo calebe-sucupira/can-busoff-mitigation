@@ -16,10 +16,27 @@
 #define CAN_ID_UPDATE      0x100
 
 #define UPDATE_PERIOD_MS   10
+#define MONITOR_PERIOD_MS  10
 
 static const char *TAG = "NODE_A";
 
 static twai_node_handle_t twai_node = NULL;
+
+static const char *state_to_string(twai_error_state_t state)
+{
+    switch (state) {
+        case TWAI_ERROR_ACTIVE:
+            return "ACTIVE";
+        case TWAI_ERROR_WARNING:
+            return "WARNING";
+        case TWAI_ERROR_PASSIVE:
+            return "PASSIVE";
+        case TWAI_ERROR_BUS_OFF:
+            return "BUS_OFF";
+        default:
+            return "UNKNOWN";
+    }
+}
 
 static void transmitter_task(void *arg)
 {
@@ -86,6 +103,39 @@ static void transmitter_task(void *arg)
     }
 }
 
+static void monitor_task(void *arg)
+{
+    TickType_t last_wake_time = xTaskGetTickCount();
+
+    while (1) {
+        twai_node_status_t status;
+        twai_node_record_t record;
+
+        if (twai_node_get_info(
+                twai_node,
+                &status,
+                &record
+            ) == ESP_OK) {
+
+            uint64_t timestamp_us = esp_timer_get_time();
+
+            printf(
+                "%llu,TEC=%u,REC=%u,state=%s,bus_errors=%lu\n",
+                timestamp_us,
+                status.tx_error_count,
+                status.rx_error_count,
+                state_to_string(status.state),
+                (unsigned long)record.bus_err_num
+            );
+        }
+
+        xTaskDelayUntil(
+            &last_wake_time,
+            pdMS_TO_TICKS(MONITOR_PERIOD_MS)
+        );
+    }
+}
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "Inicializando No A");
@@ -131,6 +181,15 @@ void app_main(void)
         4096,
         NULL,
         5,
+        NULL
+    );
+
+    xTaskCreate(
+        monitor_task,
+        "monitor_task",
+        4096,
+        NULL,
+        6,
         NULL
     );
 }
