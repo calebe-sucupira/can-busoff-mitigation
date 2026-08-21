@@ -1,0 +1,23 @@
+# Build directories
+build/
+**/build/
+
+# ESP-IDF
+sdkconfig
+sdkconfig.old
+dependencies.lock
+managed_components/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+
+# Temporary files
+*~
+.DS_Store
