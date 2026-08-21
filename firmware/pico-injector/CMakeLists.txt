@@ -13,8 +13,16 @@ add_executable(can_injector
     main.c
 )
 
-target_link_libraries(can_injector
+pico_generate_pio_header(
+    can_injector
+    ${CMAKE_CURRENT_LIST_DIR}/injector.pio
+)
+
+target_link_libraries(
+    can_injector
     pico_stdlib
+    hardware_pio
+    hardware_clocks
 )
 
 pico_add_extra_outputs(can_injector)

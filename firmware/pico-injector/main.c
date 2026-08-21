@@ -1,33 +1,69 @@
 #include "pico/stdlib.h"
+#include "hardware/clocks.h"
+#include "hardware/pio.h"
 
-#define INJ_PIN      2
-#define INJ_L_PIN    3
-#define TRIGGER_PIN  4
+#include "injector.pio.h"
 
-#define PULSE_HIGH_US 8
-#define PULSE_LOW_US  42
+#define INJ_PIN 2
 
 int main(void)
 {
-    gpio_init(INJ_PIN);
-    gpio_set_dir(INJ_PIN, GPIO_OUT);
-    gpio_put(INJ_PIN, 0);
+    PIO pio = pio0;
 
-    // Segundo canal reservado para testes futuros
-    gpio_init(INJ_L_PIN);
-    gpio_set_dir(INJ_L_PIN, GPIO_OUT);
-    gpio_put(INJ_L_PIN, 0);
+    uint offset = pio_add_program(
+        pio,
+        &injector_program
+    );
 
-    // Trigger reservado para uso posterior
-    gpio_init(TRIGGER_PIN);
-    gpio_set_dir(TRIGGER_PIN, GPIO_OUT);
-    gpio_put(TRIGGER_PIN, 0);
+    uint sm = pio_claim_unused_sm(
+        pio,
+        true
+    );
+
+    pio_gpio_init(
+        pio,
+        INJ_PIN
+    );
+
+    pio_sm_set_consecutive_pindirs(
+        pio,
+        sm,
+        INJ_PIN,
+        1,
+        true
+    );
+
+    pio_sm_config config =
+        injector_program_get_default_config(offset);
+
+    sm_config_set_set_pins(
+        &config,
+        INJ_PIN,
+        1
+    );
+
+    float divider =
+        (float)clock_get_hz(clk_sys) / 1000000.0f;
+
+    sm_config_set_clkdiv(
+        &config,
+        divider
+    );
+
+    pio_sm_init(
+        pio,
+        sm,
+        offset,
+        &config
+    );
+
+    pio_sm_set_enabled(
+        pio,
+        sm,
+        true
+    );
 
     while (true) {
-        gpio_put(INJ_PIN, 1);
-        busy_wait_us_32(PULSE_HIGH_US);
-
-        gpio_put(INJ_PIN, 0);
-        busy_wait_us_32(PULSE_LOW_US);
+        tight_loop_contents();
     }
 }
