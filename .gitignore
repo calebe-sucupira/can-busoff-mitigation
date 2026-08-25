@@ -21,3 +21,5 @@ venv/
 # Temporary files
 *~
 .DS_Store
+
+**/.history/
