@@ -22,4 +22,4 @@ venv/
 *~
 .DS_Store
 
-**/.history/
+**/.history/**/~*.lck
