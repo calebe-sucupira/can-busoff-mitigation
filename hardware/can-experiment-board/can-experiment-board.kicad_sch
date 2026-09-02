@@ -2584,7 +2584,7 @@
 		)
 		(uuid "9c0d11b3-299a-4032-b9a4-330196c079da")
 	)
-	(label "TRIGGER_A"
+	(label "TRIGGER"
 		(at 217.17 99.06 180)
 		(effects
 			(font
@@ -2684,7 +2684,7 @@
 		)
 		(uuid "ee26e0a6-1b17-41b2-9c8d-c57223a6deac")
 	)
-	(label "TRIGGER_A"
+	(label "TRIGGER"
 		(at 43.18 83.82 180)
 		(effects
 			(font
