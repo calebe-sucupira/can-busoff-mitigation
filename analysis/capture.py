@@ -28,7 +28,15 @@ def next_run_directory(base, run_type):
     return number, run_dir
 
 
-def capture_device(name, port, baud, run_dir, stop_event):
+def capture_device(
+    name,
+    port,
+    baud,
+    run_dir,
+    stop_event,
+    serial_devices,
+    serial_lock
+):
     log_path = run_dir / f"{name}.log"
     csv_path = run_dir / f"{name}.csv"
 
@@ -41,6 +49,9 @@ def capture_device(name, port, baud, run_dir, stop_event):
     except serial.SerialException as error:
         print(f"[{name}] Erro ao abrir {port}: {error}")
         return
+
+    with serial_lock:
+        serial_devices[name] = ser
 
     print(f"[{name}] Lendo {port}")
 
@@ -83,8 +94,57 @@ def capture_device(name, port, baud, run_dir, stop_event):
                 print(f"[{name}] Erro serial: {error}")
                 break
 
+    with serial_lock:
+        serial_devices.pop(name, None)
+
     ser.close()
     print(f"[{name}] Captura encerrada")
+
+
+def command_loop(
+    stop_event,
+    serial_devices,
+    serial_lock
+):
+    print()
+    print("Comandos:")
+    print("  s = iniciar perturbacao")
+    print("  x = encerrar perturbacao")
+    print("  q = encerrar captura")
+    print()
+
+    while not stop_event.is_set():
+        try:
+            command = input().strip().lower()
+        except EOFError:
+            return
+
+        if command == "q":
+            stop_event.set()
+            return
+
+        if command not in ("s", "x"):
+            print("Comando invalido. Use s, x ou q.")
+            continue
+
+        with serial_lock:
+            pico = serial_devices.get("pico")
+
+        if pico is None:
+            print("[pico] Porta serial ainda nao esta disponivel.")
+            continue
+
+        try:
+            pico.write(command.encode("ascii"))
+            pico.flush()
+
+            if command == "s":
+                print("[pico] Comando START enviado")
+            else:
+                print("[pico] Comando STOP enviado")
+
+        except serial.SerialException as error:
+            print(f"[pico] Erro ao enviar comando: {error}")
 
 
 def main():
@@ -145,9 +205,10 @@ def main():
 
     print(f"Ensaio: run_{run_number:03d}_{args.type}")
     print(f"Diretorio: {run_dir}")
-    print("Ctrl+C para encerrar")
 
     stop_event = threading.Event()
+    serial_devices = {}
+    serial_lock = threading.Lock()
     threads = []
 
     for name, port in devices.items():
@@ -158,12 +219,29 @@ def main():
                 port,
                 args.baud,
                 run_dir,
-                stop_event
+                stop_event,
+                serial_devices,
+                serial_lock
             )
         )
 
         thread.start()
         threads.append(thread)
+
+    if args.pico:
+        command_thread = threading.Thread(
+            target=command_loop,
+            args=(
+                stop_event,
+                serial_devices,
+                serial_lock
+            ),
+            daemon=True
+        )
+
+        command_thread.start()
+    else:
+        print("Ctrl+C para encerrar")
 
     try:
         while any(
