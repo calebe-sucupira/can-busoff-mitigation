@@ -25,4 +25,7 @@ target_link_libraries(
     hardware_clocks
 )
 
+pico_enable_stdio_usb(can_injector 1)
+pico_enable_stdio_uart(can_injector 0)
+
 pico_add_extra_outputs(can_injector)
