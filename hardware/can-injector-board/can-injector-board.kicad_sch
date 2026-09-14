@@ -2954,7 +2954,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+		(property "Footprint" "manual_tht:PinHeader_1x03_P2.54mm_Vertical_Manual"
 			(at 158.75 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -3195,7 +3195,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92"
+		(property "Footprint" "manual_tht:TO-92_Inline_Wide_Manual"
 			(at 123.19 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -3300,7 +3300,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "manual_tht:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
 			(at 172.72 52.832 90)
 			(hide yes)
 			(show_name no)
@@ -3460,7 +3460,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "manual_tht:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
 			(at 107.442 90.17 90)
 			(hide yes)
 			(show_name no)
@@ -3540,7 +3540,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "manual_tht:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
 			(at 172.72 42.418 90)
 			(hide yes)
 			(show_name no)
@@ -3620,7 +3620,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+		(property "Footprint" "manual_tht:C_Disc_D5.0mm_W2.5mm_P5.00mm_Manual"
 			(at 186.69 39.6748 0)
 			(hide yes)
 			(show_name no)
@@ -3702,7 +3702,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "manual_tht:PinHeader_1x02_P2.54mm_Vertical_Manual"
 			(at 190.5 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -3860,7 +3860,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "manual_tht:PinHeader_1x02_P2.54mm_Vertical_Manual"
 			(at 160.02 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -3940,7 +3940,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "manual_tht:PinHeader_1x02_P2.54mm_Vertical_Manual"
 			(at 160.02 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -4020,7 +4020,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "manual_tht:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
 			(at 101.6 85.598 90)
 			(hide yes)
 			(show_name no)
@@ -4102,7 +4102,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "manual_tht:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
 			(at 118.872 67.31 90)
 			(hide yes)
 			(show_name no)
@@ -4182,7 +4182,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+		(property "Footprint" "manual_tht:C_Disc_D5.0mm_W2.5mm_P5.00mm_Manual"
 			(at 186.69 53.6448 0)
 			(hide yes)
 			(show_name no)
@@ -4264,7 +4264,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Module:RaspberryPi_Pico_Common_Unspecified"
+		(property "Footprint" "manual_tht:RaspberryPi_Pico_Common_THT_Manual"
 			(at 58.42 127 0)
 			(hide yes)
 			(show_name no)

@@ -57,12 +57,16 @@ static const char *state_to_string(twai_error_state_t state)
     switch (state) {
         case TWAI_ERROR_ACTIVE:
             return "ACTIVE";
+
         case TWAI_ERROR_WARNING:
             return "WARNING";
+
         case TWAI_ERROR_PASSIVE:
             return "PASSIVE";
+
         case TWAI_ERROR_BUS_OFF:
             return "BUS_OFF";
+
         default:
             return "UNKNOWN";
     }
@@ -161,8 +165,17 @@ static void transmitter_task(void *arg)
 
         uint8_t payload[8];
 
-        memcpy(&payload[0], &sequence, sizeof(sequence));
-        memcpy(&payload[4], &timestamp_ms, sizeof(timestamp_ms));
+        memcpy(
+            &payload[0],
+            &sequence,
+            sizeof(sequence)
+        );
+
+        memcpy(
+            &payload[4],
+            &timestamp_ms,
+            sizeof(timestamp_ms)
+        );
 
         twai_frame_t frame = {
             .header.id = CAN_ID_UPDATE,
@@ -213,7 +226,7 @@ static void monitor_task(void *arg)
             ) == ESP_OK) {
 
             printf(
-                "%llu,SAMPLE,-1,%u,%u,%s,bus_errors=%lu\n",
+                "DATA,%llu,SAMPLE,-1,%u,%u,%s,-,bus_errors=%lu\n",
                 esp_timer_get_time(),
                 status.tx_error_count,
                 status.rx_error_count,
@@ -256,9 +269,11 @@ static void event_task(void *arg)
         switch (event.type) {
             case EVENT_TX_DONE:
                 printf(
-                    "%llu,%s,%lu,%u,%u,%s,-\n",
+                    "DATA,%llu,%s,%lu,%u,%u,%s,-,-\n",
                     event.timestamp_us,
-                    event.tx.success ? "TX_SUCCESS" : "TX_FAILED",
+                    event.tx.success
+                        ? "TX_SUCCESS"
+                        : "TX_FAILED",
                     (unsigned long)event.tx.sequence,
                     status.tx_error_count,
                     status.rx_error_count,
@@ -268,19 +283,23 @@ static void event_task(void *arg)
 
             case EVENT_STATE_CHANGE:
                 printf(
-                    "%llu,STATE_CHANGE,-1,%u,%u,%s,%s->%s\n",
+                    "DATA,%llu,STATE_CHANGE,-1,%u,%u,%s,-,%s->%s\n",
                     event.timestamp_us,
                     status.tx_error_count,
                     status.rx_error_count,
                     state_to_string(status.state),
-                    state_to_string(event.state.old_state),
-                    state_to_string(event.state.new_state)
+                    state_to_string(
+                        event.state.old_state
+                    ),
+                    state_to_string(
+                        event.state.new_state
+                    )
                 );
                 break;
 
             case EVENT_ERROR:
                 printf(
-                    "%llu,ERROR,-1,%u,%u,%s,flags=0x%08lx\n",
+                    "DATA,%llu,ERROR,-1,%u,%u,%s,-,flags=0x%08lx\n",
                     event.timestamp_us,
                     status.tx_error_count,
                     status.rx_error_count,
@@ -300,7 +319,9 @@ void app_main(void)
     );
 
     ESP_ERROR_CHECK(
-        event_queue != NULL ? ESP_OK : ESP_ERR_NO_MEM
+        event_queue != NULL
+            ? ESP_OK
+            : ESP_ERR_NO_MEM
     );
 
     twai_onchip_node_config_t node_config = {
@@ -341,13 +362,24 @@ void app_main(void)
     );
 
     ESP_ERROR_CHECK(
-        twai_node_enable(twai_node)
+        twai_node_enable(
+            twai_node
+        )
     );
 
     ESP_LOGI(
         TAG,
         "TWAI iniciado: %d bit/s",
         CAN_BITRATE
+    );
+
+    /*
+     * A partir daqui, somente os registros DATA devem
+     * ocupar a UART durante a aquisicao experimental.
+     */
+    esp_log_level_set(
+        "*",
+        ESP_LOG_NONE
     );
 
     xTaskCreate(

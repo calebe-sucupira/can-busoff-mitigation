@@ -1,0 +1,210 @@
+(footprint "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=7.62mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
+	(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 7.62mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
+	(property "Reference" "REF**"
+		(at 3.81 -2.37 0)
+		(layer "F.SilkS")
+		(uuid "4c3b4b69-851f-4fd7-9128-fb45fb624779")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal_Manual"
+		(at 3.81 2.37 0)
+		(layer "F.Fab")
+		(uuid "8ea56e51-f4f0-420c-9d16-21498e37148c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4b23a650-a027-4a79-9572-cafa674b28ca")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "Resistor"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "490d5138-cae5-40da-8e3a-727db99acd64")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "KiLib_Generator" "resistor/THT"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "b9e01d06-4e33-42a8-8d23-259583a5a27d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property ki_fp_filters "R_*")
+	(sheetname "/")
+	(sheetfile "can-injector-board.kicad_sch")
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start 0.54 -1.37)
+		(end 7.08 -1.37)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "78afcfe4-c10a-4e3a-8fdb-12004cf40bae")
+	)
+	(fp_line
+		(start 0.54 -1.04)
+		(end 0.54 -1.37)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "61a10187-c2d8-4e53-b62f-b0c23f61ba40")
+	)
+	(fp_line
+		(start 0.54 1.04)
+		(end 0.54 1.37)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a7b6ba12-0011-4c20-8672-b0a4209e7ae4")
+	)
+	(fp_line
+		(start 0.54 1.37)
+		(end 7.08 1.37)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c00d94db-5273-41d5-b054-e718d263f55e")
+	)
+	(fp_line
+		(start 7.08 -1.37)
+		(end 7.08 -1.04)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9fe57665-b342-4aa1-bef7-3399c9773d85")
+	)
+	(fp_line
+		(start 7.08 1.37)
+		(end 7.08 1.04)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "46e4c715-c9ea-4149-97eb-a77cafdbbd5c")
+	)
+	(fp_rect
+		(start -1.05 -1.5)
+		(end 8.67 1.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "20d56b20-658b-4f40-9aac-9143afabc14f")
+	)
+	(fp_line
+		(start 0 0)
+		(end 0.66 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "85e30bed-04f1-4377-8141-1ecb64bc8fec")
+	)
+	(fp_line
+		(start 7.62 0)
+		(end 6.96 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "4fb10024-ed5c-4c89-a5e4-9795b5dddade")
+	)
+	(fp_rect
+		(start 0.66 -1.25)
+		(end 6.96 1.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "3d0e1cdd-e106-4095-890e-0b41f8b1bca5")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 3.81 0 0)
+		(layer "F.Fab")
+		(uuid "c59b22cc-0c90-4cf5-afc6-2403fc2637ed")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 2.2 2.2)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "0ba52058-8a91-4766-9748-a97f99ede3c3")
+	)
+	(pad "2" thru_hole circle
+		(at 7.62 0)
+		(size 2.2 2.2)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "732537ba-1ca0-4b94-a7af-d7b011a8f1a9")
+	)
+	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

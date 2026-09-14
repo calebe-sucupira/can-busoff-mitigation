@@ -56,12 +56,16 @@ static const char *state_to_string(twai_error_state_t state)
     switch (state) {
         case TWAI_ERROR_ACTIVE:
             return "ACTIVE";
+
         case TWAI_ERROR_WARNING:
             return "WARNING";
+
         case TWAI_ERROR_PASSIVE:
             return "PASSIVE";
+
         case TWAI_ERROR_BUS_OFF:
             return "BUS_OFF";
+
         default:
             return "UNKNOWN";
     }
@@ -79,18 +83,31 @@ static bool rx_callback(
         .buffer_len = sizeof(data),
     };
 
-    if (twai_node_receive_from_isr(handle, &frame) != ESP_OK) {
+    if (twai_node_receive_from_isr(
+            handle,
+            &frame
+        ) != ESP_OK) {
         return false;
     }
 
-    if (frame.header.id != CAN_ID_UPDATE || frame.header.dlc != 8) {
+    if (frame.header.id != CAN_ID_UPDATE ||
+        frame.header.dlc != 8) {
         return false;
     }
 
     received_update_t update;
 
-    memcpy(&update.sequence, &data[0], sizeof(update.sequence));
-    memcpy(&update.timestamp_ms, &data[4], sizeof(update.timestamp_ms));
+    memcpy(
+        &update.sequence,
+        &data[0],
+        sizeof(update.sequence)
+    );
+
+    memcpy(
+        &update.timestamp_ms,
+        &data[4],
+        sizeof(update.timestamp_ms)
+    );
 
     BaseType_t task_woken = pdFALSE;
 
@@ -163,6 +180,26 @@ static void receiver_task(void *arg)
             continue;
         }
 
+        twai_node_status_t status;
+        twai_node_record_t record;
+
+        if (twai_node_get_info(
+                twai_node,
+                &status,
+                &record
+            ) == ESP_OK) {
+
+            printf(
+                "DATA,%llu,RECEIVED,%lu,%u,%u,%s,-,timestamp_ms=%lu\n",
+                esp_timer_get_time(),
+                (unsigned long)update.sequence,
+                status.tx_error_count,
+                status.rx_error_count,
+                state_to_string(status.state),
+                (unsigned long)update.timestamp_ms
+            );
+        }
+
         if ((update.sequence % 100) == 0) {
             ESP_LOGI(
                 TAG,
@@ -189,7 +226,7 @@ static void monitor_task(void *arg)
             ) == ESP_OK) {
 
             printf(
-                "%llu,SAMPLE,-1,%u,%u,%s,bus_errors=%lu\n",
+                "DATA,%llu,SAMPLE,-1,%u,%u,%s,-,bus_errors=%lu\n",
                 esp_timer_get_time(),
                 status.tx_error_count,
                 status.rx_error_count,
@@ -232,19 +269,23 @@ static void event_task(void *arg)
         switch (event.type) {
             case EVENT_STATE_CHANGE:
                 printf(
-                    "%llu,STATE_CHANGE,-1,%u,%u,%s,%s->%s\n",
+                    "DATA,%llu,STATE_CHANGE,-1,%u,%u,%s,-,%s->%s\n",
                     event.timestamp_us,
                     status.tx_error_count,
                     status.rx_error_count,
                     state_to_string(status.state),
-                    state_to_string(event.state.old_state),
-                    state_to_string(event.state.new_state)
+                    state_to_string(
+                        event.state.old_state
+                    ),
+                    state_to_string(
+                        event.state.new_state
+                    )
                 );
                 break;
 
             case EVENT_ERROR:
                 printf(
-                    "%llu,ERROR,-1,%u,%u,%s,flags=0x%08lx\n",
+                    "DATA,%llu,ERROR,-1,%u,%u,%s,-,flags=0x%08lx\n",
                     event.timestamp_us,
                     status.tx_error_count,
                     status.rx_error_count,
@@ -269,11 +310,15 @@ void app_main(void)
     );
 
     ESP_ERROR_CHECK(
-        rx_queue != NULL ? ESP_OK : ESP_ERR_NO_MEM
+        rx_queue != NULL
+            ? ESP_OK
+            : ESP_ERR_NO_MEM
     );
 
     ESP_ERROR_CHECK(
-        event_queue != NULL ? ESP_OK : ESP_ERR_NO_MEM
+        event_queue != NULL
+            ? ESP_OK
+            : ESP_ERR_NO_MEM
     );
 
     twai_onchip_node_config_t node_config = {
@@ -287,6 +332,8 @@ void app_main(void)
         .bit_timing = {
             .bitrate = CAN_BITRATE,
         },
+
+        .tx_queue_depth = 1,
     };
 
     ESP_ERROR_CHECK(
@@ -311,13 +358,24 @@ void app_main(void)
     );
 
     ESP_ERROR_CHECK(
-        twai_node_enable(twai_node)
+        twai_node_enable(
+            twai_node
+        )
     );
 
     ESP_LOGI(
         TAG,
         "TWAI iniciado: %d bit/s",
         CAN_BITRATE
+    );
+
+    /*
+     * A partir daqui, somente os registros DATA devem
+     * ocupar a UART durante a aquisicao experimental.
+     */
+    esp_log_level_set(
+        "*",
+        ESP_LOG_NONE
     );
 
     xTaskCreate(

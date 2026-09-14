@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "manual_tht") (type "KiCad") (uri "${KIPRJMOD}/../libraries/manual_tht.pretty") (options "") (descr "Footprints adapted for hand-drilled single-sided boards"))
+)

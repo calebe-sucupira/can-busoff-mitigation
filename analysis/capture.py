@@ -8,143 +8,166 @@ from pathlib import Path
 import serial
 
 
-def next_run_directory(base, run_type):
-    base.mkdir(parents=True, exist_ok=True)
+def next_run_directory(base_dir, run_type):
+    existing_runs = []
 
-    numbers = []
+    for path in base_dir.glob("run_*"):
+        if not path.is_dir():
+            continue
 
-    for path in base.glob("run_*"):
-        if path.is_dir():
-            try:
-                numbers.append(int(path.name.split("_")[1]))
-            except (IndexError, ValueError):
-                pass
+        try:
+            number = int(path.name.split("_")[1])
+            existing_runs.append(number)
+        except (IndexError, ValueError):
+            pass
 
-    number = max(numbers, default=0) + 1
+    run_number = max(existing_runs, default=0) + 1
+    run_dir = base_dir / f"run_{run_number:03d}_{run_type}"
+    run_dir.mkdir(parents=True, exist_ok=False)
 
-    run_dir = base / f"run_{number:03d}_{run_type}"
-    run_dir.mkdir()
-
-    return number, run_dir
+    return run_number, run_dir
 
 
-def capture_device(
-    name,
-    port,
-    baud,
-    run_dir,
-    stop_event,
-    serial_devices,
-    serial_lock
-):
-    log_path = run_dir / f"{name}.log"
+def open_serial_no_reset(port, baud):
+    ser = serial.Serial()
+
+    ser.port = port
+    ser.baudrate = baud
+    ser.timeout = 0.1
+    ser.write_timeout = 1
+
+    # Evita usar as linhas de controle para reset automático do ESP32.
+    ser.dtr = False
+    ser.rts = False
+
+    ser.open()
+
+    # Reforça o estado depois da abertura.
+    ser.dtr = False
+    ser.rts = False
+
+    return ser
+
+
+def capture_device(name, port, baud, run_dir, stop_event, serial_devices):
+    raw_path = run_dir / f"{name}.log"
     csv_path = run_dir / f"{name}.csv"
 
     try:
-        ser = serial.Serial(
-            port=port,
-            baudrate=baud,
-            timeout=0.2
-        )
-    except serial.SerialException as error:
-        print(f"[{name}] Erro ao abrir {port}: {error}")
-        return
-
-    with serial_lock:
+        ser = open_serial_no_reset(port, baud)
         serial_devices[name] = ser
 
-    print(f"[{name}] Lendo {port}")
+        print(f"[{name}] conectado em {port}")
 
-    with open(log_path, "w", buffering=1) as log_file, \
-         open(csv_path, "w", buffering=1) as csv_file:
+        with (
+            raw_path.open("w", encoding="utf-8", buffering=1) as raw_file,
+            csv_path.open("w", encoding="utf-8", buffering=1) as csv_file,
+        ):
+            csv_file.write(
+                "timestamp_us,node,event,sequence,tec,rec,state,mode,detail\n"
+            )
 
-        csv_file.write(
-            "timestamp_us,node,event,sequence,tec,rec,state,mode,detail\n"
-        )
+            while not stop_event.is_set():
+                try:
+                    raw = ser.readline()
 
-        while not stop_event.is_set():
-            try:
-                raw = ser.readline()
+                    if not raw:
+                        continue
 
-                if not raw:
-                    continue
+                    host_timestamp_ns = time.time_ns()
 
-                line = raw.decode(
-                    "utf-8",
-                    errors="replace"
-                ).strip()
+                    line = raw.decode(
+                        "utf-8",
+                        errors="replace"
+                    ).rstrip("\r\n")
 
-                if not line:
-                    continue
-
-                host_time_ns = time.time_ns()
-
-                log_file.write(
-                    f"{host_time_ns}\t{line}\n"
-                )
-
-                if line.startswith("DATA,"):
-                    csv_file.write(
-                        line[5:] + "\n"
+                    raw_file.write(
+                        f"{host_timestamp_ns}\t{line}\n"
                     )
 
-                print(f"[{name}] {line}")
+                    print(f"[{name}] {line}")
 
-            except serial.SerialException as error:
-                print(f"[{name}] Erro serial: {error}")
-                break
+                    if line.startswith("DATA,"):
+                        fields = line.split(",", 8)
 
-    with serial_lock:
-        serial_devices.pop(name, None)
+                        if len(fields) == 9:
+                            (
+                                _,
+                                timestamp_us,
+                                event,
+                                sequence,
+                                tec,
+                                rec,
+                                state,
+                                mode,
+                                detail,
+                            ) = fields
 
-    ser.close()
-    print(f"[{name}] Captura encerrada")
+                            csv_file.write(
+                                f"{timestamp_us},"
+                                f"{name},"
+                                f"{event},"
+                                f"{sequence},"
+                                f"{tec},"
+                                f"{rec},"
+                                f"{state},"
+                                f"{mode},"
+                                f"{detail}\n"
+                            )
+
+                except serial.SerialException as exc:
+                    if not stop_event.is_set():
+                        print(f"[{name}] erro serial: {exc}")
+                    break
+
+    except serial.SerialException as exc:
+        print(f"[{name}] não foi possível abrir {port}: {exc}")
+        stop_event.set()
+
+    finally:
+        ser = serial_devices.pop(name, None)
+
+        if ser is not None and ser.is_open:
+            try:
+                ser.close()
+            except serial.SerialException:
+                pass
+
+        print(f"[{name}] encerrado")
 
 
-def command_loop(
-    stop_event,
-    serial_devices,
-    serial_lock
-):
+def pico_command_loop(pico_serial, stop_event):
     print()
-    print("Comandos:")
-    print("  s = iniciar perturbacao")
-    print("  x = encerrar perturbacao")
+    print("Comandos do Pico:")
+    print("  s = START")
+    print("  x = STOP")
     print("  q = encerrar captura")
     print()
 
     while not stop_event.is_set():
         try:
-            command = input().strip().lower()
-        except EOFError:
-            return
+            command = input("> ").strip().lower()
 
-        if command == "q":
+        except (EOFError, KeyboardInterrupt):
             stop_event.set()
-            return
+            break
 
-        if command not in ("s", "x"):
-            print("Comando invalido. Use s, x ou q.")
-            continue
+        if command == "s":
+            pico_serial.write(b"START\n")
+            pico_serial.flush()
+            print("[pico] START enviado")
 
-        with serial_lock:
-            pico = serial_devices.get("pico")
+        elif command == "x":
+            pico_serial.write(b"STOP\n")
+            pico_serial.flush()
+            print("[pico] STOP enviado")
 
-        if pico is None:
-            print("[pico] Porta serial ainda nao esta disponivel.")
-            continue
+        elif command == "q":
+            stop_event.set()
+            break
 
-        try:
-            pico.write(command.encode("ascii"))
-            pico.flush()
-
-            if command == "s":
-                print("[pico] Comando START enviado")
-            else:
-                print("[pico] Comando STOP enviado")
-
-        except serial.SerialException as error:
-            print(f"[pico] Erro ao enviar comando: {error}")
+        elif command:
+            print("Comando inválido. Use s, x ou q.")
 
 
 def main():
@@ -156,59 +179,68 @@ def main():
         required=True
     )
 
-    parser.add_argument("--node-a")
-    parser.add_argument("--node-b")
-    parser.add_argument("--pico")
-    parser.add_argument("--baud", type=int, default=115200)
+    parser.add_argument(
+        "--node-a",
+        required=True
+    )
+
+    parser.add_argument(
+        "--node-b",
+        required=True
+    )
+
+    parser.add_argument(
+        "--pico",
+        default=None
+    )
+
+    parser.add_argument(
+        "--baud",
+        type=int,
+        default=115200
+    )
 
     args = parser.parse_args()
 
-    devices = {}
+    project_root = Path(__file__).resolve().parent.parent
+    raw_data_dir = project_root / "data" / "raw"
+    raw_data_dir.mkdir(parents=True, exist_ok=True)
 
-    if args.node_a:
-        devices["node_a"] = args.node_a
+    run_number, run_dir = next_run_directory(
+        raw_data_dir,
+        args.type
+    )
 
-    if args.node_b:
-        devices["node_b"] = args.node_b
+    devices = {
+        "node_a": args.node_a,
+        "node_b": args.node_b,
+    }
 
     if args.pico:
         devices["pico"] = args.pico
 
-    if not devices:
-        print("Informe pelo menos uma porta serial.")
-        return
-
-    run_number, run_dir = next_run_directory(
-        Path("data/raw"),
-        args.type
-    )
-
     metadata = {
         "run": run_number,
         "type": args.type,
-        "started_at": datetime.now(
-            timezone.utc
-        ).isoformat(),
+        "started_at": datetime.now(timezone.utc).isoformat(),
         "baud": args.baud,
-        "devices": devices
+        "devices": devices,
     }
 
-    with open(
-        run_dir / "metadata.json",
-        "w"
-    ) as file:
+    metadata_path = run_dir / "metadata.json"
+
+    with metadata_path.open(
+        "w",
+        encoding="utf-8"
+    ) as metadata_file:
         json.dump(
             metadata,
-            file,
+            metadata_file,
             indent=2
         )
 
-    print(f"Ensaio: run_{run_number:03d}_{args.type}")
-    print(f"Diretorio: {run_dir}")
-
     stop_event = threading.Event()
     serial_devices = {}
-    serial_lock = threading.Lock()
     threads = []
 
     for name, port in devices.items():
@@ -221,43 +253,56 @@ def main():
                 run_dir,
                 stop_event,
                 serial_devices,
-                serial_lock
-            )
+            ),
+            daemon=True,
         )
 
         thread.start()
         threads.append(thread)
 
-    if args.pico:
-        command_thread = threading.Thread(
-            target=command_loop,
-            args=(
-                stop_event,
-                serial_devices,
-                serial_lock
-            ),
-            daemon=True
-        )
-
-        command_thread.start()
-    else:
-        print("Ctrl+C para encerrar")
-
     try:
-        while any(
-            thread.is_alive()
-            for thread in threads
-        ):
-            time.sleep(0.2)
+        if args.pico:
+            timeout = time.time() + 5
+
+            while (
+                "pico" not in serial_devices
+                and not stop_event.is_set()
+                and time.time() < timeout
+            ):
+                time.sleep(0.05)
+
+            if "pico" in serial_devices:
+                pico_command_loop(
+                    serial_devices["pico"],
+                    stop_event
+                )
+            else:
+                print("[pico] porta não disponível")
+                stop_event.set()
+
+        else:
+            while not stop_event.is_set():
+                time.sleep(0.2)
 
     except KeyboardInterrupt:
-        print("\nEncerrando...")
+        print()
+        print("Encerrando captura...")
         stop_event.set()
 
-    for thread in threads:
-        thread.join()
+    finally:
+        stop_event.set()
 
-    print(f"Dados salvos em {run_dir}")
+        for thread in threads:
+            thread.join(timeout=2)
+
+        for ser in list(serial_devices.values()):
+            if ser.is_open:
+                try:
+                    ser.close()
+                except serial.SerialException:
+                    pass
+
+    print(f"Dados salvos em: {run_dir}")
 
 
 if __name__ == "__main__":

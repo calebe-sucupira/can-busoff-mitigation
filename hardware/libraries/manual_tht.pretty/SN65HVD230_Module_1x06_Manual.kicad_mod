@@ -1,0 +1,189 @@
+(footprint "SN65HVD230_Module_1x06_Manual"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Through hole straight socket strip, 1x06, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
+	(tags "Through hole socket strip THT 1x06 2.54mm single row")
+	(property "Reference" "REF**"
+		(at 0 -2.77 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "7db745b2-eb68-41a4-9e2f-3f4e3d5c541a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SN65HVD230_Module_1x06_Manual"
+		(at 0 15.47 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2da20fe2-c689-4fd8-b307-10fee692a41a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f69efa3a-fa3c-46f1-9a56-36f880161ea6")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 180)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "688fcec5-a23e-49fd-91c0-3079b6498969")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "KiLib_Generator" "connector/pin_header_socket"
+		(at 0 0 180)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "4b341454-ea26-4532-99ca-66f17fb8e091")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(sheetname "/")
+	(sheetfile "can-experiment-board.kicad_sch")
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -1.75 -1.75)
+		(end 14.25 14.25)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "f07135e6-5e8d-42eb-9bd7-0717e5d82c32")
+	)
+	(fp_rect
+		(start -2.5 -2.5)
+		(end 15 15)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "34f576f0-d80f-45c6-b8e0-aa79d426bce2")
+	)
+	(fp_rect
+		(start -1.25 -1.25)
+		(end 13.75 13.75)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "5ed2b782-514c-410b-9a9e-dd06af23fffd")
+	)
+	(fp_text user "REF**"
+		(at -1.25 -3.75 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "c0fa64a7-d8c6-47d6-9010-4764cbfdd798")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify left bottom)
+		)
+	)
+	(fp_text user "SN65HVD230_Module_1x06"
+		(at -3 16.75 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "31633aed-5121-4be6-84a4-286da632e3c5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify left bottom)
+		)
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "e41c3b71-8cb6-418d-8ebe-d2e5eff01ded")
+	)
+	(pad "2" thru_hole circle
+		(at 0 2.54)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "561728bd-59a3-462e-b2ea-f3cda910f88a")
+	)
+	(pad "3" thru_hole circle
+		(at 0 5.08)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "399a3bdf-d910-4eda-96aa-d8ec57d4bbc2")
+	)
+	(pad "4" thru_hole circle
+		(at 0 7.62)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "fe49decd-7884-4f02-925e-c3567251431d")
+	)
+	(pad "5" thru_hole circle
+		(at 0 10.16)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "05e9762a-c703-4064-8fbf-c6bebe530df9")
+	)
+	(pad "6" thru_hole circle
+		(at 0 12.7)
+		(size 2.1 2.1)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "65e8bcd1-32d7-48f1-933f-3817b1159d56")
+	)
+	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
