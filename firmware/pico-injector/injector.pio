@@ -1,6 +1,7 @@
 .program injector
+
 .wrap_target
-    set pins, 1 [7]
-    set pins, 0 [31]
-    nop         [9]
+    set pindirs, 1 [7]
+    set pindirs, 0 [31]
+    nop             [10]
 .wrap

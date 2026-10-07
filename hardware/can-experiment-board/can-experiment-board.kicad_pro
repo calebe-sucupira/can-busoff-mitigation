@@ -618,7 +618,7 @@
       "include_excluded_from_bom": true,
       "name": "Default Editing",
       "sort_asc": true,
-      "sort_field": "Refer\u00eancia"
+      "sort_field": "Referência"
     },
     "bus_aliases": {},
     "connection_grid_size": 50.0,

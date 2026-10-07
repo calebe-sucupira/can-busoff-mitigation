@@ -28,7 +28,7 @@ def next_run_directory(base_dir, run_type):
     return run_number, run_dir
 
 
-def open_serial_no_reset(port, baud):
+def open_serial(port, baud, is_pico=False):
     ser = serial.Serial()
 
     ser.port = port
@@ -36,14 +36,12 @@ def open_serial_no_reset(port, baud):
     ser.timeout = 0.1
     ser.write_timeout = 1
 
-    # Evita usar as linhas de controle para reset automático do ESP32.
-    ser.dtr = False
+    ser.dtr = bool(is_pico)
     ser.rts = False
 
     ser.open()
 
-    # Reforça o estado depois da abertura.
-    ser.dtr = False
+    ser.dtr = bool(is_pico)
     ser.rts = False
 
     return ser
@@ -54,7 +52,7 @@ def capture_device(name, port, baud, run_dir, stop_event, serial_devices):
     csv_path = run_dir / f"{name}.csv"
 
     try:
-        ser = open_serial_no_reset(port, baud)
+        ser = open_serial(port, baud, is_pico=(name == "pico"))
         serial_devices[name] = ser
 
         print(f"[{name}] conectado em {port}")
@@ -85,7 +83,33 @@ def capture_device(name, port, baud, run_dir, stop_event, serial_devices):
                         f"{host_timestamp_ns}\t{line}\n"
                     )
 
-                    print(f"[{name}] {line}")
+                    show_in_terminal = name == "pico"
+
+                    if not line.startswith("DATA,"):
+                        show_in_terminal = True
+
+                    if line.startswith("DATA,"):
+                        fields = line.split(",", 8)
+
+                        if len(fields) == 9 and name != "pico":
+                            _, _, event, _, tec, rec, state, _, detail = fields
+
+                            if event in {"ERROR", "STATE_CHANGE", "TX_FAILED"}:
+                                show_in_terminal = True
+
+                            elif event == "SAMPLE" and (
+                                tec != "0"
+                                or rec != "0"
+                                or state != "ACTIVE"
+                                or (
+                                    detail.startswith("bus_errors=")
+                                    and detail != "bus_errors=0"
+                                )
+                            ):
+                                show_in_terminal = True
+
+                    if show_in_terminal:
+                        print(f"[{name}] {line}")
 
                     if line.startswith("DATA,"):
                         fields = line.split(",", 8)
@@ -118,6 +142,7 @@ def capture_device(name, port, baud, run_dir, stop_event, serial_devices):
                 except serial.SerialException as exc:
                     if not stop_event.is_set():
                         print(f"[{name}] erro serial: {exc}")
+
                     break
 
     except serial.SerialException as exc:
@@ -153,14 +178,32 @@ def pico_command_loop(pico_serial, stop_event):
             break
 
         if command == "s":
-            pico_serial.write(b"START\n")
-            pico_serial.flush()
-            print("[pico] START enviado")
+            try:
+                pico_serial.write(b"s")
+                pico_serial.flush()
+                print("[pico] START enviado")
+
+            except (
+                serial.SerialException,
+                serial.SerialTimeoutException
+            ) as exc:
+                print(f"[pico] falha ao enviar START: {exc}")
+                stop_event.set()
+                break
 
         elif command == "x":
-            pico_serial.write(b"STOP\n")
-            pico_serial.flush()
-            print("[pico] STOP enviado")
+            try:
+                pico_serial.write(b"x")
+                pico_serial.flush()
+                print("[pico] STOP enviado")
+
+            except (
+                serial.SerialException,
+                serial.SerialTimeoutException
+            ) as exc:
+                print(f"[pico] falha ao enviar STOP: {exc}")
+                stop_event.set()
+                break
 
         elif command == "q":
             stop_event.set()
@@ -204,7 +247,11 @@ def main():
 
     project_root = Path(__file__).resolve().parent.parent
     raw_data_dir = project_root / "data" / "raw"
-    raw_data_dir.mkdir(parents=True, exist_ok=True)
+
+    raw_data_dir.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     run_number, run_dir = next_run_directory(
         raw_data_dir,
@@ -233,6 +280,7 @@ def main():
         "w",
         encoding="utf-8"
     ) as metadata_file:
+
         json.dump(
             metadata,
             metadata_file,
@@ -276,6 +324,7 @@ def main():
                     serial_devices["pico"],
                     stop_event
                 )
+
             else:
                 print("[pico] porta não disponível")
                 stop_event.set()

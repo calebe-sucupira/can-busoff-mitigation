@@ -17,8 +17,9 @@
 #define CAN_BITRATE        125000
 #define CAN_ID_UPDATE      0x100
 
-#define UPDATE_PERIOD_MS   10
-#define MONITOR_PERIOD_MS  10
+#define UPDATE_PERIOD_MS      10
+#define MONITOR_PERIOD_MS      1
+#define MONITOR_HEARTBEAT_MS 100
 
 typedef enum {
     EVENT_TX_DONE,
@@ -215,6 +216,16 @@ static void monitor_task(void *arg)
 {
     TickType_t last_wake_time = xTaskGetTickCount();
 
+    bool initialized = false;
+
+    uint32_t last_tec = 0;
+    uint32_t last_rec = 0;
+    uint32_t last_bus_errors = 0;
+
+    twai_error_state_t last_state = TWAI_ERROR_ACTIVE;
+
+    uint64_t last_log_us = 0;
+
     while (1) {
         twai_node_status_t status;
         twai_node_record_t record;
@@ -225,14 +236,39 @@ static void monitor_task(void *arg)
                 &record
             ) == ESP_OK) {
 
-            printf(
-                "DATA,%llu,SAMPLE,-1,%u,%u,%s,-,bus_errors=%lu\n",
-                esp_timer_get_time(),
-                status.tx_error_count,
-                status.rx_error_count,
-                state_to_string(status.state),
-                (unsigned long)record.bus_err_num
-            );
+            uint64_t now_us = esp_timer_get_time();
+
+            bool changed =
+                !initialized ||
+                status.tx_error_count != last_tec ||
+                status.rx_error_count != last_rec ||
+                status.state != last_state ||
+                record.bus_err_num != last_bus_errors;
+
+            bool heartbeat =
+                initialized &&
+                (now_us - last_log_us >=
+                 MONITOR_HEARTBEAT_MS * 1000ULL);
+
+            if (changed || heartbeat) {
+                printf(
+                    "DATA,%llu,SAMPLE,-1,%u,%u,%s,-,bus_errors=%lu\n",
+                    now_us,
+                    status.tx_error_count,
+                    status.rx_error_count,
+                    state_to_string(status.state),
+                    (unsigned long)record.bus_err_num
+                );
+
+                last_log_us = now_us;
+            }
+
+            last_tec = status.tx_error_count;
+            last_rec = status.rx_error_count;
+            last_state = status.state;
+            last_bus_errors = record.bus_err_num;
+
+            initialized = true;
         }
 
         xTaskDelayUntil(
@@ -252,6 +288,7 @@ static void event_task(void *arg)
                 &event,
                 portMAX_DELAY
             ) != pdTRUE) {
+
             continue;
         }
 
@@ -263,6 +300,7 @@ static void event_task(void *arg)
                 &status,
                 &record
             ) != ESP_OK) {
+
             continue;
         }
 
@@ -373,10 +411,6 @@ void app_main(void)
         CAN_BITRATE
     );
 
-    /*
-     * A partir daqui, somente os registros DATA devem
-     * ocupar a UART durante a aquisicao experimental.
-     */
     esp_log_level_set(
         "*",
         ESP_LOG_NONE
