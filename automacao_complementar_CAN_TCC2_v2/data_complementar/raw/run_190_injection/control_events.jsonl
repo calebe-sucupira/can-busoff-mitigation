@@ -1,0 +1,8 @@
+{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792189237412848271, "name": "node_a", "port": "/dev/ttyUSB0"}
+{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792189237414838496, "name": "node_b", "port": "/dev/ttyACM0"}
+{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792189237416724305, "name": "pico", "port": "/dev/ttyACM1"}
+{"event": "STATUS_SENT", "host_timestamp_ns": 1792189239419026186}
+{"event": "CONFIG_SENT", "host_timestamp_ns": 1792189239421984929, "command": "CFG,190,BAIXO,40000,60000,EA125C50,5"}
+{"event": "NODE_A_MODE_VERIFIED", "host_timestamp_ns": 1792189239424662314, "throttling": 1, "condition": "ADAPTATIVO"}
+{"event": "START_SENT", "host_timestamp_ns": 1792189239424842713}
+{"event": "CAPTURE_END_REQUESTED", "host_timestamp_ns": 1792189255226345296}

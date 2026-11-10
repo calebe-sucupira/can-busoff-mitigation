@@ -1,0 +1,10 @@
+node_a_timestamp_us,host_capture_timestamp_ns,approx_s_since_pico_NOISE_START,event,state,detail,bus_off_entry
+27840285,1792514466123507322,21.078901,STATE_CHANGE,-,ACTIVE->WARNING,False
+27880391,1792514466183516516,21.13891,STATE_CHANGE,-,WARNING->PASSIVE,False
+28459203,1792514466756417492,21.711811,STATE_CHANGE,-,PASSIVE->BUS_OFF,True
+28459207,1792514466762066061,21.717459,TX_FAILED,-,latency_us=398;wait_us=34,False
+28459273,1792514466767709811,21.723103,RECOVERY_REQUEST,-,result=ESP_OK,False
+28459227,1792514466783747789,21.739141,SAMPLE,BUS_OFF,tec_peak=250;rec_peak=0;errors=52;produced=2842;submitted=2842;tx_ok=2841;tx_failed=1;rejected=0;gap=0;pending=0;qlen=0;lost=0,True
+28460792,1792514466797929101,21.753322,SAMPLE,BUS_OFF,tec_peak=111;rec_peak=0;errors=0;produced=2842;submitted=2842;tx_ok=2841;tx_failed=1;rejected=0;gap=0;pending=0;qlen=0;lost=0,True
+28462792,1792514466812317632,21.767711,SAMPLE,BUS_OFF,tec_peak=100;rec_peak=0;errors=0;produced=2842;submitted=2842;tx_ok=2841;tx_failed=1;rejected=0;gap=0;pending=0;qlen=0;lost=0,True
+28470530,1792514466817293349,21.772687,STATE_CHANGE,-,BUS_OFF->ACTIVE,False

@@ -1,0 +1,12 @@
+{
+  "test": "synthetic_busoff_event_to_idle_pico_stop",
+  "time_utc": "2026-10-18T21:06:13.456960+00:00",
+  "port": "/dev/ttyACM1",
+  "trigger": "synthetic_STATE_CHANGE_PASSIVE_to_BUS_OFF",
+  "bus_off_real": false,
+  "pulse_start_command_sent": false,
+  "pico_stop_sent": true,
+  "pico_ack": "run_id=900002;pulses=4;missed_deadlines=0;max_late_us=1",
+  "final_state": "IDLE",
+  "electrical_output_verified": false
+}

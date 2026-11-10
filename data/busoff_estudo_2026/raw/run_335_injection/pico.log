@@ -1,0 +1,17 @@
+1792519936304184208	DATA,6099519811,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=334;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+1792519936307873829	DATA,6099524595,CONFIG_OK,-1,0,0,-,-,run_id=335;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+1792519936311651242	DATA,6099528126,COMMAND,-1,0,0,-,-,TEST_REQUEST
+1792519936313451772	DATA,6099528358,TEST_START,-1,0,0,-,-,run_id=335;profile=PHASE20;baseline_us=5000000;injection_us=40000000;recovery_us=5000000
+1792519941314365792	DATA,6104528405,NOISE_START,-1,0,0,-,-,profile=PHASE20;run_id=335;pulse_us=8;interval_min_us=20000;interval_max_us=20000;mean_us=20000;seed=0x6d2b79f5;strategy=phase_scan;phase_shift_us=500;phase_hold_pulses=50
+1792519942312963038	DATA,6105528350,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=50;phase_offset_us=500;step=1
+1792519943312852983	DATA,6106528846,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=100;phase_offset_us=1000;step=2
+1792519944312442038	DATA,6107529344,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=150;phase_offset_us=1500;step=3
+1792519945312269594	DATA,6108529844,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=200;phase_offset_us=2000;step=4
+1792519946312476732	DATA,6109530344,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=250;phase_offset_us=2500;step=5
+1792519947313835768	DATA,6110530845,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=300;phase_offset_us=3000;step=6
+1792519948314308357	DATA,6111531344,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=350;phase_offset_us=3500;step=7
+1792519949314581746	DATA,6112531845,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=400;phase_offset_us=4000;step=8
+1792519950315630793	DATA,6113532346,PHASE_STEP,-1,0,0,-,-,run_id=335;pulses=450;phase_offset_us=4500;step=9
+1792519950619668566	DATA,6113837070,COMMAND,-1,0,0,-,-,STOP_REQUEST
+1792519950623432150	DATA,6113837267,TEST_ABORTED,-1,0,0,-,-,run_id=335;pulses=465;missed_deadlines=0;max_late_us=2
+1792519950626975171	DATA,6113843704,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=335;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000

@@ -1,0 +1,21 @@
+{
+  "run": 343,
+  "condition": "REFERENCIA",
+  "expected_throttling": 0,
+  "valid": false,
+  "reason": "Node A: STATE_CHANGE PASSIVE->BUS_OFF",
+  "warnings": [],
+  "bus_off_detected": true,
+  "stop_command_sent": true,
+  "stop_acknowledged": true,
+  "pico_idle_confirmed": true,
+  "observation_status": "BUS_OFF_OBSERVED_ABORTED",
+  "first_bus_off_event": {
+    "event": "STATE_CHANGE",
+    "node_a_timestamp_us": 23539160,
+    "host_capture_timestamp_ns": 1792520642281138619,
+    "details": "PASSIVE->BUS_OFF"
+  },
+  "host_detection_timestamp_ns": 1792520642295421005,
+  "post_bus_off_observation_s": 2.0
+}

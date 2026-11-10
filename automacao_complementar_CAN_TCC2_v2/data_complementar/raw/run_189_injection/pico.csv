@@ -1,0 +1,8 @@
+timestamp_us,node,event,sequence,tec,rec,state,mode,detail
+1450416731,pico,STATUS,-1,0,0,-,-,firmware=pico-param-v1.5;state=IDLE;run_id=0;profile=ALTO;interval_min_us=9375;interval_max_us=14375;seed=0x6d2b79f5;injection_us=20000000
+1450422026,pico,CONFIG_OK,-1,0,0,-,-,run_id=189;profile=BAIXO;interval_min_us=40000;interval_max_us=60000;seed=0xea125c50;injection_us=5000000
+1450424041,pico,COMMAND,-1,0,0,-,-,TEST_REQUEST
+1450424310,pico,TEST_START,-1,0,0,-,-,run_id=189;profile=BAIXO;baseline_us=5000000;injection_us=5000000;recovery_us=5000000
+1455424352,pico,NOISE_START,-1,0,0,-,-,profile=BAIXO;run_id=189;pulse_us=8;interval_min_us=40000;interval_max_us=60000;mean_us=50000;seed=0xea125c50
+1460424324,pico,NOISE_END,-1,0,0,-,-,run_id=189;pulses=100;missed_deadlines=0;max_late_us=2
+1465424293,pico,TEST_END,-1,0,0,-,-,run_id=189;pulses=100;missed_deadlines=0;max_late_us=2

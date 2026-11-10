@@ -1,0 +1,8 @@
+Runs analisadas: 60/60
+Com cobertura integral: True
+ZIPs ausentes: []
+Falhas: []
+Divergências com CSV consolidado: []
+AVISO: coincidencia temporal ERROR/servico nao conta tentativas ou retransmissoes CAN.
+Limites das fases usam timestamps do host; intervalos do servico e TEC usam relogio do ESP32.
+Estatisticas sao observacionais e descritivas; usar runs como unidades para comparacao.

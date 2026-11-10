@@ -1,0 +1,31 @@
+{
+  "gerado_em_utc": "2026-10-19T20:43:14.069096+00:00",
+  "repo": "/home/calebe/Documentos/tcc/can-busoff-mitigation",
+  "fontes_examinados": 25,
+  "evidencias_encontradas": 528,
+  "categorias": {
+    "G_CAPTURA_AUDITAVEL": 37,
+    "H_MONITOR_PROG_TEC": 112,
+    "E_COMPROVACAO_PARADA": 121,
+    "C_DETECTOR_HOST": 37,
+    "A_EVENTO_BUSOFF": 28,
+    "F_FALHAS_SERIAL_TIMEOUT": 72,
+    "D_COMANDO_STOP_PICO": 110,
+    "B_ESTADO_E_RECUPERACAO": 11
+  },
+  "indicadores_textuais": {
+    "no_a_marcas_busoff": true,
+    "no_a_marcas_recuperacao": true,
+    "pico_marcas_stop": true,
+    "pico_marcas_saida": true,
+    "host_marcas_busoff": true,
+    "host_marcas_stop": true,
+    "host_marcas_confirmacao": true,
+    "host_marcas_timeout": true,
+    "host_marcas_captura": true
+  },
+  "erros_de_leitura_ou_sintaxe": [],
+  "aviso": "INDICADORES TEXTUAIS NAO COMPROVAM CAMINHO DE CONTROLE, EFETIVIDADE DE STOP OU SEGURANCA ELETRICA",
+  "nenhuma_porta_serial_aberta": true,
+  "nenhum_codigo_do_projeto_modificado": true
+}

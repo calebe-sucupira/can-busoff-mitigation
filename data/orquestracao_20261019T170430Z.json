@@ -1,0 +1,34 @@
+{
+  "started_utc": "2026-10-19T17:04:30.514815+00:00",
+  "plan": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/plano_ampliacao_24_ensaios_CAN_runs_197_220.csv",
+  "node_a_port": "/dev/ttyUSB0",
+  "app_offset": "0x10000",
+  "firmware": {
+    "REFERENCIA": {
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_referencia.bin",
+      "sha256": "559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e"
+    },
+    "ADAPTATIVO": {
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_adaptativo.bin",
+      "sha256": "e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db"
+    }
+  },
+  "groups": [
+    {
+      "mode": "ADAPTATIVO",
+      "from_run": 203,
+      "to_run": 205,
+      "status": "concluido",
+      "started_utc": "2026-10-19T17:04:30.515020+00:00",
+      "finished_utc": "2026-10-19T17:07:22.815204+00:00"
+    },
+    {
+      "mode": "REFERENCIA",
+      "from_run": 206,
+      "to_run": 208,
+      "status": "concluido",
+      "started_utc": "2026-10-19T17:07:22.815749+00:00",
+      "finished_utc": "2026-10-19T17:10:17.626691+00:00"
+    }
+  ]
+}

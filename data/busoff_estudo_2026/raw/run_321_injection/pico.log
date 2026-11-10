@@ -1,0 +1,16 @@
+1792518812991305896	DATA,4976173150,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=320;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+1792518812994759691	DATA,4976178163,CONFIG_OK,-1,0,0,-,-,run_id=321;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+1792518812998847296	DATA,4976181712,COMMAND,-1,0,0,-,-,TEST_REQUEST
+1792518813000932968	DATA,4976181929,TEST_START,-1,0,0,-,-,run_id=321;profile=PHASE20;baseline_us=5000000;injection_us=40000000;recovery_us=5000000
+1792518818003360630	DATA,4981181964,NOISE_START,-1,0,0,-,-,profile=PHASE20;run_id=321;pulse_us=8;interval_min_us=20000;interval_max_us=20000;mean_us=20000;seed=0x6d2b79f5;strategy=phase_scan;phase_shift_us=500;phase_hold_pulses=50
+1792518818997773541	DATA,4982181910,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=50;phase_offset_us=500;step=1
+1792518820000230710	DATA,4983182406,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=100;phase_offset_us=1000;step=2
+1792518820998222363	DATA,4984182905,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=150;phase_offset_us=1500;step=3
+1792518821998819728	DATA,4985183404,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=200;phase_offset_us=2000;step=4
+1792518822999358635	DATA,4986183906,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=250;phase_offset_us=2500;step=5
+1792518824000027518	DATA,4987184406,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=300;phase_offset_us=3000;step=6
+1792518825000143188	DATA,4988184906,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=350;phase_offset_us=3500;step=7
+1792518826004638051	DATA,4989185407,PHASE_STEP,-1,0,0,-,-,run_id=321;pulses=400;phase_offset_us=4000;step=8
+1792518826007233007	DATA,4989188842,COMMAND,-1,0,0,-,-,STOP_REQUEST
+1792518826009294584	DATA,4989189040,TEST_ABORTED,-1,0,0,-,-,run_id=321;pulses=400;missed_deadlines=0;max_late_us=2
+1792518826015047487	DATA,4989196260,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=321;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000

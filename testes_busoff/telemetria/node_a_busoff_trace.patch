@@ -1,0 +1,41 @@
+--- a/firmware/node-a/main/main.c
++++ b/firmware/node-a/main/main.c
+@@ -25,7 +25,7 @@
+ #define PENDING_WARN_MS        200
+ #define RECOVER_RETRY_MS       100
+ #define APP_CORE               1
+-#define FW_BUILD_TAG           "node-a-throttling-v1.3"
++#define FW_BUILD_TAG           "node-a-throttling-v1.3-busoff-trace"
+ #define TX_WAKE_UPDATE         (1UL << 0)
+ #define TX_WAKE_DONE           (1UL << 1)
+ #define TX_WAKE_MODE           (1UL << 2)
+@@ -326,6 +326,7 @@
+     uint64_t last_recovery_attempt_us = 0;
+     uint32_t peak_tec = 0;
+     uint32_t peak_rec = 0;
++    uint8_t reported_tec_markers = 0;
+     twai_error_state_t last_state = TWAI_ERROR_ACTIVE;
+     throttle_mode_t last_mode = THROTTLE_NORMAL;
+     bool recovery_requested = false;
+@@ -369,10 +370,20 @@
+             if (status.rx_error_count > peak_rec) {
+                 peak_rec = status.rx_error_count;
+             }
++            // Um unico SAMPLE extra na primeira observacao de cada marco.
++            const uint32_t markers[] = {160, 192, 224, 240};
++            uint8_t marker_mask = 0;
++            for (unsigned i = 0; i < sizeof(markers) / sizeof(markers[0]); i++) {
++                if (status.tx_error_count >= markers[i]) {
++                    marker_mask |= (uint8_t)(1U << i);
++                }
++            }
++            bool new_tec_marker = (marker_mask & (uint8_t)~reported_tec_markers) != 0;
++            reported_tec_markers |= marker_mask;
+             bool state_changed = status.state != last_state || mode != last_mode;
+             bool heartbeat = last_log_us == 0 ||
+                              now_us - last_log_us >= HEARTBEAT_MS * 1000ULL;
+-            if (state_changed || heartbeat) {
++            if (state_changed || heartbeat || new_tec_marker) {
+                 node_event_t event = {
+                     .type = EVENT_SAMPLE,
+                     .timestamp_us = now_us,

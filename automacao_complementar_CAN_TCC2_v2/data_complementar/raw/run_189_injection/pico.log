@@ -1,0 +1,7 @@
+1792189213765701957	DATA,1450416731,STATUS,-1,0,0,-,-,firmware=pico-param-v1.5;state=IDLE;run_id=0;profile=ALTO;interval_min_us=9375;interval_max_us=14375;seed=0x6d2b79f5;injection_us=20000000
+1792189213768088936	DATA,1450422026,CONFIG_OK,-1,0,0,-,-,run_id=189;profile=BAIXO;interval_min_us=40000;interval_max_us=60000;seed=0xea125c50;injection_us=5000000
+1792189213769726259	DATA,1450424041,COMMAND,-1,0,0,-,-,TEST_REQUEST
+1792189213770984640	DATA,1450424310,TEST_START,-1,0,0,-,-,run_id=189;profile=BAIXO;baseline_us=5000000;injection_us=5000000;recovery_us=5000000
+1792189218771671100	DATA,1455424352,NOISE_START,-1,0,0,-,-,profile=BAIXO;run_id=189;pulse_us=8;interval_min_us=40000;interval_max_us=60000;mean_us=50000;seed=0xea125c50
+1792189223770378447	DATA,1460424324,NOISE_END,-1,0,0,-,-,run_id=189;pulses=100;missed_deadlines=0;max_late_us=2
+1792189228768994802	DATA,1465424293,TEST_END,-1,0,0,-,-,run_id=189;pulses=100;missed_deadlines=0;max_late_us=2

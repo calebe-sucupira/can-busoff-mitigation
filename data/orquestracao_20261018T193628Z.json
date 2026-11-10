@@ -1,0 +1,42 @@
+{
+  "started_utc": "2026-10-18T19:36:28.310965+00:00",
+  "plan": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/plano_exploratorio_CAN_ALTO_runs_191_196.csv",
+  "node_a_port": "/dev/ttyUSB0",
+  "app_offset": "0x10000",
+  "firmware": {
+    "REFERENCIA": {
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_referencia.bin",
+      "sha256": "559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e"
+    },
+    "ADAPTATIVO": {
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_adaptativo.bin",
+      "sha256": "e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db"
+    }
+  },
+  "groups": [
+    {
+      "mode": "ADAPTATIVO",
+      "from_run": 193,
+      "to_run": 193,
+      "status": "concluido",
+      "started_utc": "2026-10-18T19:36:28.311209+00:00",
+      "finished_utc": "2026-10-18T19:37:29.126266+00:00"
+    },
+    {
+      "mode": "REFERENCIA",
+      "from_run": 194,
+      "to_run": 195,
+      "status": "concluido",
+      "started_utc": "2026-10-18T19:37:29.127036+00:00",
+      "finished_utc": "2026-10-18T19:39:25.594957+00:00"
+    },
+    {
+      "mode": "ADAPTATIVO",
+      "from_run": 196,
+      "to_run": 196,
+      "status": "concluido",
+      "started_utc": "2026-10-18T19:39:25.595422+00:00",
+      "finished_utc": "2026-10-18T19:40:26.381706+00:00"
+    }
+  ]
+}

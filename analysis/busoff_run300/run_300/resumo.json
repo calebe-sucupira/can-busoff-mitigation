@@ -1,0 +1,42 @@
+{
+  "run": 300,
+  "condition": "REFERENCIA",
+  "observation_status": "BUS_OFF_OBSERVED_ABORTED",
+  "qc_valid": "false",
+  "bus_off_raw": true,
+  "bus_off_qc": true,
+  "first_busoff_event": "STATE_CHANGE",
+  "first_busoff_node_a_us": 28459203,
+  "first_busoff_approx_since_noise_s": 21.711811,
+  "first_busoff_host_capture_ns": 1792514466756417492,
+  "pico_noise_start_host_ns": 1792514445044606647,
+  "pico_end_event": "TEST_ABORTED",
+  "boot_throttling": 0,
+  "control_stop_result": true,
+  "stop_sent": true,
+  "stop_ack": true,
+  "pico_idle": true,
+  "max_sampled_tec_in_injection": 244,
+  "max_tec_peak_in_injection": 250,
+  "observed_tec_ge_96": true,
+  "observed_tec_ge_128": true,
+  "node_a_tx_success_captured": 2170,
+  "node_b_received_captured": 2171,
+  "node_a_lost_max": 0,
+  "node_a_samples_in_injection": 223,
+  "warnings": [],
+  "metadados": {
+    "profile": "PHASE20",
+    "seed": "0x6D2B79F5",
+    "expected_throttling": 0,
+    "run_reason": "Node A: STATE_CHANGE PASSIVE->BUS_OFF",
+    "first_busoff_qc": {
+      "event": "STATE_CHANGE",
+      "node_a_timestamp_us": 28459203,
+      "host_capture_timestamp_ns": 1792514466756417492,
+      "details": "PASSIVE->BUS_OFF"
+    },
+    "interval_min_us": 20000,
+    "interval_max_us": 20000
+  }
+}

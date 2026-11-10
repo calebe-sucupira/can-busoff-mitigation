@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
@@ -11,10 +13,43 @@
 
 #define TRIGGER_PIN 4
 
-#define TEST_DURATION_US 12000
-#define TEST_SETTLE_US 1000
+#define BASELINE_DURATION_US 5000000ULL
+#define RECOVERY_DURATION_US 5000000ULL
 
-static bool injector_running = false;
+
+#define PULSE_WIDTH_US 8u
+
+
+#include <string.h>
+
+#define CONFIG_PROTOCOL_VERSION "pico-param-v1.5"
+
+static uint32_t configured_run_id = 0;
+static char configured_profile[16] = "ALTO";
+static uint32_t interval_min_us = 9375u;
+static uint32_t interval_max_us = 14375u;
+static uint32_t configured_seed = 0x6D2B79F5u;
+static uint64_t injection_duration_us = 20000000ULL;
+
+static char command_buffer[96];
+static uint32_t command_length = 0;
+
+typedef enum {
+    TEST_IDLE,
+    TEST_BASELINE,
+    TEST_INJECTION,
+    TEST_RECOVERY
+} test_state_t;
+
+static test_state_t test_state = TEST_IDLE;
+
+static uint64_t state_started_us = 0;
+static uint64_t next_pulse_us = 0;
+
+static uint32_t pulse_count = 0;
+static uint32_t missed_deadlines = 0;
+static uint32_t max_late_us = 0;
+static uint32_t rng_state = 0x6D2B79F5u;
 
 static uint32_t injector_mask(void)
 {
@@ -59,16 +94,23 @@ static void injector_set_high_z(
     );
 }
 
-static void injector_start(
+static void injector_prepare_idle(
     PIO pio,
     uint sm,
     uint offset,
     const pio_sm_config *config
 )
 {
-    if (injector_running) {
-        return;
-    }
+    pio_sm_set_enabled(
+        pio,
+        sm,
+        false
+    );
+
+    pio_sm_clear_fifos(
+        pio,
+        sm
+    );
 
     pio_sm_init(
         pio,
@@ -82,13 +124,9 @@ static void injector_start(
         sm
     );
 
-    sleep_us(
-        TEST_SETTLE_US
-    );
-
     gpio_put(
         TRIGGER_PIN,
-        1
+        0
     );
 
     pio_sm_set_enabled(
@@ -96,73 +134,353 @@ static void injector_start(
         sm,
         true
     );
-
-    injector_running = true;
-
-    log_event(
-        "NOISE_START",
-        "HL_SHORT_PULSE_TRAIN"
-    );
 }
 
-static void injector_stop(
+static uint32_t prng_next(void)
+{
+    uint32_t x = rng_state;
+
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+
+    rng_state = x;
+
+    return x;
+}
+
+static uint32_t random_interval_us(void)
+{
+    uint32_t span =
+        interval_max_us -
+        interval_min_us +
+        1u;
+
+    return
+        interval_min_us +
+        (prng_next() % span);
+}
+
+static void injector_pulse(
     PIO pio,
     uint sm
 )
 {
-    pio_sm_set_enabled(
+    pio_sm_put_blocking(
         pio,
         sm,
-        false
+        1u
     );
 
-    injector_set_high_z(
-        pio,
-        sm
-    );
-
-    gpio_put(
-        TRIGGER_PIN,
-        0
-    );
-
-    if (injector_running) {
-        log_event(
-            "NOISE_END",
-            "HL_SHORT_DISABLED"
-        );
-    }
-
-    injector_running = false;
+    pulse_count++;
 }
 
-static void injector_test(
+static void start_test(
     PIO pio,
     uint sm,
     uint offset,
     const pio_sm_config *config
 )
 {
-    injector_start(
+    if (test_state != TEST_IDLE) {
+        log_event(
+            "COMMAND",
+            "TEST_ALREADY_RUNNING"
+        );
+
+        return;
+    }
+
+    injector_prepare_idle(
         pio,
         sm,
         offset,
         config
     );
 
-    sleep_us(
-        TEST_DURATION_US
+    rng_state = configured_seed;
+    pulse_count = 0;
+    missed_deadlines = 0;
+    max_late_us = 0;
+
+    state_started_us = time_us_64();
+    test_state = TEST_BASELINE;
+
+    char detail[192];
+    snprintf(detail, sizeof(detail),
+        "run_id=%lu;profile=%s;baseline_us=5000000;injection_us=%llu;recovery_us=5000000",
+        (unsigned long)configured_run_id, configured_profile,
+        (unsigned long long)injection_duration_us);
+    log_event("TEST_START", detail);
+}
+
+static void abort_test(
+    PIO pio,
+    uint sm,
+    uint offset,
+    const pio_sm_config *config
+)
+{
+    injector_prepare_idle(
+        pio,
+        sm,
+        offset,
+        config
     );
 
-    injector_stop(
-        pio,
-        sm
+    test_state = TEST_IDLE;
+
+    char detail[128];
+
+    snprintf(
+        detail,
+        sizeof(detail),
+        "run_id=%lu;pulses=%lu;missed_deadlines=%lu;max_late_us=%lu",
+        (unsigned long)configured_run_id,
+        (unsigned long)pulse_count,
+        (unsigned long)missed_deadlines,
+        (unsigned long)max_late_us
     );
 
     log_event(
-        "PIO_TEST",
-        "duration_us=1000"
+        "TEST_ABORTED",
+        detail
     );
+}
+
+static void update_test(
+    PIO pio,
+    uint sm
+)
+{
+    uint64_t now_us = time_us_64();
+
+    if (test_state == TEST_BASELINE) {
+        if (
+            now_us - state_started_us
+            >= BASELINE_DURATION_US
+        ) {
+            test_state = TEST_INJECTION;
+            state_started_us = now_us;
+
+            next_pulse_us =
+                now_us +
+                random_interval_us();
+
+            gpio_put(
+                TRIGGER_PIN,
+                1
+            );
+
+            char detail[192];
+
+            snprintf(detail, sizeof(detail),
+                "profile=%s;run_id=%lu;pulse_us=%u;interval_min_us=%lu;interval_max_us=%lu;mean_us=%lu;seed=0x%08lx",
+                configured_profile, (unsigned long)configured_run_id,
+                PULSE_WIDTH_US, (unsigned long)interval_min_us,
+                (unsigned long)interval_max_us,
+                (unsigned long)((interval_min_us + interval_max_us) / 2u),
+                (unsigned long)configured_seed);
+
+            log_event(
+                "NOISE_START",
+                detail
+            );
+        }
+
+        return;
+    }
+
+    if (test_state == TEST_INJECTION) {
+        if (
+            now_us - state_started_us
+            >= injection_duration_us
+        ) {
+            injector_set_high_z(
+                pio,
+                sm
+            );
+
+            gpio_put(
+                TRIGGER_PIN,
+                0
+            );
+
+            test_state = TEST_RECOVERY;
+            state_started_us = now_us;
+
+            char detail[128];
+
+            snprintf(
+                detail,
+                sizeof(detail),
+                "run_id=%lu;pulses=%lu;missed_deadlines=%lu;max_late_us=%lu",
+                (unsigned long)configured_run_id,
+                (unsigned long)pulse_count,
+                (unsigned long)missed_deadlines,
+                (unsigned long)max_late_us
+            );
+
+            log_event(
+                "NOISE_END",
+                detail
+            );
+
+            return;
+        }
+
+        if (now_us >= next_pulse_us) {
+            uint64_t lateness_us =
+                now_us - next_pulse_us;
+
+            if (lateness_us > max_late_us) {
+                max_late_us = (uint32_t)lateness_us;
+            }
+
+            injector_pulse(
+                pio,
+                sm
+            );
+
+            next_pulse_us += random_interval_us();
+
+            uint64_t after_pulse_us = time_us_64();
+
+            while (next_pulse_us <= after_pulse_us) {
+                missed_deadlines++;
+                next_pulse_us += random_interval_us();
+            }
+        }
+
+        return;
+    }
+
+    if (test_state == TEST_RECOVERY) {
+        if (
+            now_us - state_started_us
+            >= RECOVERY_DURATION_US
+        ) {
+            test_state = TEST_IDLE;
+
+            char detail[128];
+
+            snprintf(
+                detail,
+                sizeof(detail),
+                "run_id=%lu;pulses=%lu;missed_deadlines=%lu;max_late_us=%lu",
+                (unsigned long)configured_run_id,
+                (unsigned long)pulse_count,
+                (unsigned long)missed_deadlines,
+                (unsigned long)max_late_us
+            );
+
+            log_event(
+                "TEST_END",
+                detail
+            );
+        }
+    }
+}
+
+
+static void send_status(void)
+{
+    char detail[192];
+    snprintf(detail, sizeof(detail),
+        "firmware=%s;state=%s;run_id=%lu;profile=%s;interval_min_us=%lu;interval_max_us=%lu;seed=0x%08lx;injection_us=%llu",
+        CONFIG_PROTOCOL_VERSION,
+        test_state == TEST_IDLE ? "IDLE" : "BUSY",
+        (unsigned long)configured_run_id, configured_profile,
+        (unsigned long)interval_min_us, (unsigned long)interval_max_us,
+        (unsigned long)configured_seed,
+        (unsigned long long)injection_duration_us);
+    log_event("STATUS", detail);
+}
+
+static void apply_command_line(const char *line)
+{
+    if (strncmp(line, "CFG,", 4) != 0) {
+        log_event("CONFIG_ERROR", "reason=UNKNOWN_COMMAND");
+        return;
+    }
+
+    if (test_state != TEST_IDLE) {
+        log_event("CONFIG_ERROR", "reason=BUSY");
+        return;
+    }
+
+    unsigned long id = 0, minimum = 0, maximum = 0, seed = 0, duration_s = 0;
+    char profile[16] = {0};
+    char extra = 0;
+    int parsed = sscanf(line, "CFG,%lu,%15[^,],%lu,%lu,%lx,%lu%c",
+        &id, profile, &minimum, &maximum, &seed, &duration_s, &extra);
+
+    if (parsed != 6 || id == 0 || minimum < 1000 ||
+        maximum > 100000 || minimum > maximum ||
+        seed == 0 || duration_s < 5 || duration_s > 180 ||
+        (strcmp(profile, "BAIXO") != 0 &&
+         strcmp(profile, "MEDIO_V2") != 0 &&
+         strcmp(profile, "MEDIO_ORIGINAL") != 0 &&
+         strcmp(profile, "ALTO") != 0)) {
+        log_event("CONFIG_ERROR", "reason=INVALID_PARAMETERS");
+        return;
+    }
+
+    configured_run_id = (uint32_t)id;
+    strcpy(configured_profile, profile);
+    interval_min_us = (uint32_t)minimum;
+    interval_max_us = (uint32_t)maximum;
+    configured_seed = (uint32_t)seed;
+    injection_duration_us = (uint64_t)duration_s * 1000000ULL;
+
+    char detail[192];
+    snprintf(detail, sizeof(detail),
+        "run_id=%lu;profile=%s;interval_min_us=%lu;interval_max_us=%lu;seed=0x%08lx;injection_us=%llu",
+        (unsigned long)configured_run_id, configured_profile,
+        (unsigned long)interval_min_us, (unsigned long)interval_max_us,
+        (unsigned long)configured_seed,
+        (unsigned long long)injection_duration_us);
+    log_event("CONFIG_OK", detail);
+}
+
+static void process_input(int command, PIO pio, uint sm,
+                          uint offset, const pio_sm_config *config)
+{
+    if (command < 0) {
+        return;
+    }
+
+    if (command_length == 0 && (command == 's' || command == 'S')) {
+        log_event("COMMAND", "TEST_REQUEST");
+        start_test(pio, sm, offset, config);
+        return;
+    }
+    if (command_length == 0 && (command == 'x' || command == 'X')) {
+        log_event("COMMAND", "STOP_REQUEST");
+        abort_test(pio, sm, offset, config);
+        return;
+    }
+    if (command_length == 0 && command == '?') {
+        send_status();
+        return;
+    }
+    if (command == '\r') {
+        return;
+    }
+    if (command == '\n') {
+        command_buffer[command_length] = '\0';
+        if (command_length > 0) {
+            apply_command_line(command_buffer);
+        }
+        command_length = 0;
+        return;
+    }
+    if (command_length < sizeof(command_buffer) - 1u) {
+        command_buffer[command_length++] = (char)command;
+    } else {
+        command_length = 0;
+        log_event("CONFIG_ERROR", "reason=COMMAND_TOO_LONG");
+    }
 }
 
 int main(void)
@@ -228,16 +546,11 @@ int main(void)
         divider
     );
 
-    pio_sm_init(
+    injector_prepare_idle(
         pio,
         sm,
         offset,
         &config
-    );
-
-    injector_set_high_z(
-        pio,
-        sm
     );
 
     sleep_ms(1500);
@@ -248,43 +561,9 @@ int main(void)
     );
 
     while (true) {
-        int command =
-            getchar_timeout_us(1000);
-
-        if (
-            command == 's'
-            || command == 'S'
-            || command == 't'
-            || command == 'T'
-        ) {
-            log_event(
-                "COMMAND",
-                "TEST_REQUEST"
-            );
-
-            injector_test(
-                pio,
-                sm,
-                offset,
-                &config
-            );
-        }
-
-        if (
-            command == 'x'
-            || command == 'X'
-        ) {
-            log_event(
-                "COMMAND",
-                "STOP_REQUEST"
-            );
-
-            injector_stop(
-                pio,
-                sm
-            );
-        }
-
+        int command = getchar_timeout_us(0);
+        process_input(command, pio, sm, offset, &config);
+        update_test(pio, sm);
         tight_loop_contents();
     }
 }

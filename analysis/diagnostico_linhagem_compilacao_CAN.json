@@ -1,0 +1,116 @@
+{
+  "repo": "/home/calebe/Documentos/tcc/can-busoff-mitigation",
+  "search_root": "/home/calebe/Documentos/tcc/can-busoff-mitigation",
+  "matched_artifacts": [
+    {
+      "origem": "BIN",
+      "caminho": "/home/calebe/Documentos/tcc/can-busoff-mitigation/firmware/node-a/build/node_a.bin",
+      "membro": "",
+      "sha256": "4e65131036fcd9db999a5fe67f4874f7d2c319b4d5d3caa89ad65e871c6a14e5",
+      "grupo": "ORIGINAL/REFERENCIA"
+    },
+    {
+      "origem": "BIN",
+      "caminho": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_adaptativo.bin",
+      "membro": "",
+      "sha256": "e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db",
+      "grupo": "COMPLEMENTAR/ADAPTATIVO"
+    },
+    {
+      "origem": "BIN",
+      "caminho": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_referencia.bin",
+      "membro": "",
+      "sha256": "559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e",
+      "grupo": "COMPLEMENTAR/REFERENCIA"
+    },
+    {
+      "origem": "BIN",
+      "caminho": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/workspaces/referencia/build/node_a.bin",
+      "membro": "",
+      "sha256": "559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e",
+      "grupo": "COMPLEMENTAR/REFERENCIA"
+    },
+    {
+      "origem": "BIN",
+      "caminho": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/workspaces/adaptativo/build/node_a.bin",
+      "membro": "",
+      "sha256": "e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db",
+      "grupo": "COMPLEMENTAR/ADAPTATIVO"
+    }
+  ],
+  "build_inspection": {
+    "PRINCIPAL": {
+      "workspace": "/home/calebe/Documentos/tcc/can-busoff-mitigation/firmware/node-a",
+      "exists": true,
+      "sources": {
+        "main.c": "2f6d44f9d70a1c2a100f26879e70fb294ea0dc67f2d06e64eab51e7ef0b8725c",
+        "throttle_policy.h": "cb86176b489c1ce05f17e8b5d0def79218a4736b95be0a74f4623e890d88314c",
+        "sdkconfig": "45b2cd13e7b3fc39d3fe773bcf48e1fc9f9694d1068788a5560fcb9a24fafc82"
+      },
+      "macro_effective": "MACRO_NAO_ENCONTRADA_NA_LINHA",
+      "compiler_defines": [
+        "ESP_PLATFORM",
+        "IDF_VER=\"v6.0.2\"",
+        "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE",
+        "SOC_XTAL_FREQ_MHZ=CONFIG_XTAL_FREQ",
+        "_GLIBCXX_HAVE_POSIX_SEMAPHORE",
+        "_GLIBCXX_USE_POSIX_SEMAPHORE",
+        "_GNU_SOURCE",
+        "_POSIX_READER_WRITER_LOCKS"
+      ],
+      "main_compile_command_found": true
+    },
+    "REFERENCIA": {
+      "workspace": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/workspaces/referencia",
+      "exists": true,
+      "sources": {
+        "main.c": "2f6d44f9d70a1c2a100f26879e70fb294ea0dc67f2d06e64eab51e7ef0b8725c",
+        "throttle_policy.h": "cb86176b489c1ce05f17e8b5d0def79218a4736b95be0a74f4623e890d88314c",
+        "sdkconfig": "45b2cd13e7b3fc39d3fe773bcf48e1fc9f9694d1068788a5560fcb9a24fafc82"
+      },
+      "macro_effective": "ENABLE_THROTTLING=0",
+      "compiler_defines": [
+        "ENABLE_THROTTLING=0",
+        "ESP_PLATFORM",
+        "IDF_VER=\"v6.0.2\"",
+        "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE",
+        "SOC_XTAL_FREQ_MHZ=CONFIG_XTAL_FREQ",
+        "_GLIBCXX_HAVE_POSIX_SEMAPHORE",
+        "_GLIBCXX_USE_POSIX_SEMAPHORE",
+        "_GNU_SOURCE",
+        "_POSIX_READER_WRITER_LOCKS"
+      ],
+      "main_compile_command_found": true
+    },
+    "ADAPTATIVO": {
+      "workspace": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/workspaces/adaptativo",
+      "exists": true,
+      "sources": {
+        "main.c": "2f6d44f9d70a1c2a100f26879e70fb294ea0dc67f2d06e64eab51e7ef0b8725c",
+        "throttle_policy.h": "cb86176b489c1ce05f17e8b5d0def79218a4736b95be0a74f4623e890d88314c",
+        "sdkconfig": "45b2cd13e7b3fc39d3fe773bcf48e1fc9f9694d1068788a5560fcb9a24fafc82"
+      },
+      "macro_effective": "ENABLE_THROTTLING=1",
+      "compiler_defines": [
+        "ENABLE_THROTTLING=1",
+        "ESP_PLATFORM",
+        "IDF_VER=\"v6.0.2\"",
+        "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE",
+        "SOC_XTAL_FREQ_MHZ=CONFIG_XTAL_FREQ",
+        "_GLIBCXX_HAVE_POSIX_SEMAPHORE",
+        "_GLIBCXX_USE_POSIX_SEMAPHORE",
+        "_GNU_SOURCE",
+        "_POSIX_READER_WRITER_LOCKS"
+      ],
+      "main_compile_command_found": true
+    }
+  },
+  "source_history": [
+    "47062d6 | 2026-10-07 | checkpoint: bancada e injecao de falhas antes da calibracao gradual",
+    "bea57fd | 2026-09-14 | feat: validate CAN baseline and data acquisition",
+    "e4faa84 | 2026-08-21 | Add TWAI monitoring and event logging",
+    "f84b4ee | 2026-08-21 | Add CAN error monitoring to nodes",
+    "8aaf91d | 2026-08-21 | Add base firmware for CAN node A"
+  ],
+  "conclusion_rule": "Hash igual identifica bytes iguais; hashes diferentes nao comprovam mudanca funcional. Fontes atuais e flags de build nao comprovam o historico sem vinculacao documental."
+}

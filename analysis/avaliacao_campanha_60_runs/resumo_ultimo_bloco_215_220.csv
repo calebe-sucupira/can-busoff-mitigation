@@ -1,0 +1,7 @@
+run,block,profile,policy,seed_hex,binary_sha256,qc_valid,pulses,missed_deadlines,max_late_us,injection_actual_s,tec_peak_inj,tec_peak_run,rec_peak_run,a_error_alerts_40s,b_error_alerts_40s,a_tx_success_40s,b_received_40s,a_alerts_per_1000_tx,passive_entries_run,passive_time_run_s,gap_total_run,gap_seq_tx,gap_seq_rx,tx_failed_run,rejected_run,lost_fw_run,busoff_run,bad_data_rows_a,bad_data_rows_b,bad_data_rows_pico
+215,10,ALTO,ADAPTATIVO,0xDB693EEE,e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db,True,3371,0,2,39.99999,135,135,0,373,194,3840,3839,97.13542,5,0.879096,161,161,161,0,0,0,0,0,0,0
+216,10,MEDIO_V2,ADAPTATIVO,0xDB693EEE,e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db,True,2002,0,2,39.999984,52,52,0,202,103,4000,3999,50.5,0,0,0,0,0,0,0,0,0,0,0,0
+217,10,BAIXO,ADAPTATIVO,0xDB693EEE,e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db,True,797,0,2,39.999988,37,37,0,101,53,4000,4000,25.25,0,0,0,0,0,0,0,0,0,0,0,0
+218,10,BAIXO,REFERENCIA,0xDB693EEE,559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e,True,797,0,2,39.999986,36,36,0,123,67,4000,3999,30.75,0,0,0,0,0,0,0,0,0,0,0,0
+219,10,MEDIO_V2,REFERENCIA,0xDB693EEE,559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e,True,2002,0,2,39.99998,68,68,0,214,108,4001,4000,53.48663,0,0,0,0,0,0,0,0,0,0,0,0
+220,10,ALTO,REFERENCIA,0xDB693EEE,559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e,True,3371,0,2,39.999989,139,139,0,417,214,4001,4000,104.22394,5,0.331394,0,0,0,0,0,0,0,0,0,0

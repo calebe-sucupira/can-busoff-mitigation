@@ -1,0 +1,10 @@
+timestamp_us,node,event,sequence,tec,rec,state,mode,detail
+4167233772,pico,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=310;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+4167239252,pico,CONFIG_OK,-1,0,0,-,-,run_id=311;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000
+4167245769,pico,COMMAND,-1,0,0,-,-,TEST_REQUEST
+4167245981,pico,TEST_START,-1,0,0,-,-,run_id=311;profile=PHASE20;baseline_us=5000000;injection_us=40000000;recovery_us=5000000
+4172246017,pico,NOISE_START,-1,0,0,-,-,profile=PHASE20;run_id=311;pulse_us=8;interval_min_us=20000;interval_max_us=20000;mean_us=20000;seed=0x6d2b79f5;strategy=phase_scan;phase_shift_us=500;phase_hold_pulses=50
+4173245961,pico,PHASE_STEP,-1,0,0,-,-,run_id=311;pulses=50;phase_offset_us=500;step=1
+4173349219,pico,COMMAND,-1,0,0,-,-,STOP_REQUEST
+4173349403,pico,TEST_ABORTED,-1,0,0,-,-,run_id=311;pulses=55;missed_deadlines=0;max_late_us=2
+4173353559,pico,STATUS,-1,0,0,-,-,firmware=pico-param-v1.6-phase20;state=IDLE;run_id=311;profile=PHASE20;interval_min_us=20000;interval_max_us=20000;seed=0x6d2b79f5;injection_us=40000000

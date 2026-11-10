@@ -1,0 +1,35 @@
+{
+  "created_utc": "2026-10-16T21:28:14.675128+00:00",
+  "project": "/home/calebe/Documentos/tcc/can-busoff-mitigation/firmware/node-a",
+  "source_sha256": "a4eadc5af9232b86bbc4e034e3c1e5ead88e17c706f597d0e10ae7d4193a203a",
+  "images": {
+    "REFERENCIA": {
+      "enable_throttling": 0,
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_referencia.bin",
+      "sha256": "559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e",
+      "support_images_sha256": {
+        "bootloader/bootloader.bin": "ec94acc4394e16afdd95d757306cd7f752f0c9a2ded1cd27b78e318bee59eff9",
+        "partition_table/partition-table.bin": "7f00b6c042a89b15b0cac534f82ed988caf29278ff5700b0c511eb1b5bb7c820"
+      }
+    },
+    "ADAPTATIVO": {
+      "enable_throttling": 1,
+      "path": "/home/calebe/Documentos/tcc/can-busoff-mitigation/automacao_complementar_CAN_TCC2_v2/binarios_node_a_complementar/node_a_adaptativo.bin",
+      "sha256": "e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db",
+      "support_images_sha256": {
+        "bootloader/bootloader.bin": "0e8bd5676112afb333dd56022379a7e1788b5b631978d288b800f61b7dcd7868",
+        "partition_table/partition-table.bin": "7f00b6c042a89b15b0cac534f82ed988caf29278ff5700b0c511eb1b5bb7c820"
+      }
+    }
+  },
+  "app_flash_offset": "0x10000",
+  "flash_settings": {
+    "flash_mode": "dio",
+    "flash_size": "2MB",
+    "flash_freq": "40m"
+  },
+  "bootloader_bytes_identical": false,
+  "partition_tables_identical": true,
+  "sdkconfigs_identical": true,
+  "note": "Compilacoes recuperadas sem rebuild. Nenhuma gravacao realizada. Validar boot e modo de cada binario antes de qualquer teste fisico."
+}

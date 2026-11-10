@@ -1,0 +1,109 @@
+--- a/automacao_busoff_segura_v1/executar_campanha_CAN_seguro.py
++++ b/automacao_busoff_segura_v1/executar_campanha_CAN_seguro.py
+@@ -22,7 +22,7 @@
+ except ImportError:
+     serial = None
+ 
+-VERSION = 'pico-param-v1.5'
++VERSION = 'pico-param-v1.6-phase20'
+ POST_BUSOFF_OBSERVATION_S = 2.0
+ # Mantido exatamente o protocolo do Pico ja utilizado nos ensaios oficiais.
+ EXPECTED_FIELDS = ('run_previsto', 'perfil', 'intervalo_min_us',
+@@ -30,7 +30,8 @@
+                    'condicao', 'throttling_esperado', 'bloco')
+ PROFILES = {'BAIXO': (40000, 60000),
+             'MEDIO_V2': (17500, 22500),
+-            'ALTO': (9375, 14375)}
++            'ALTO': (9375, 14375),
++            'PHASE20': (20000, 20000)}
+ CONDITIONS = {'REFERENCIA': 0, 'ADAPTATIVO': 1}
+ 
+ 
+@@ -48,7 +49,14 @@
+     block: int
+ 
+ 
+-def ideal_pulses(seed, minimum, maximum, duration):
++def ideal_pulses(seed, minimum, maximum, duration, profile=None):
++    if profile == 'PHASE20':
++        deadline = 20000
++        pulses = 0
++        while deadline < duration * 1000000:
++            pulses += 1
++            deadline += 20000 + (500 if pulses % 50 == 0 else 0)
++        return pulses
+     x = seed
+     deadline = 0
+     pulses = 0
+@@ -95,7 +103,9 @@
+                 raise ValueError(f'Bloco invalido: {run}')
+             if not (5 <= run.duration <= 180 and 0 < run.seed <= 0xFFFFFFFF):
+                 raise ValueError(f'Semente/duracao invalida: {run}')
+-            ideal = ideal_pulses(run.seed, run.minimum, run.maximum, run.duration)
++            if run.profile == 'PHASE20' and run.duration > 40:
++                raise ValueError(f'PHASE20 limitado a 40 segundos: {run}')
++            ideal = ideal_pulses(run.seed, run.minimum, run.maximum, run.duration, run.profile)
+             if run.expected_pulses != -1 and ideal != run.expected_pulses:
+                 raise ValueError(f'Previsao de pulsos incorreta no plano, Run {run.run}: '
+                                  f'CSV={run.expected_pulses}, calculada={ideal}')
+@@ -329,7 +339,7 @@
+         'planned': {'profile': plan.profile, 'seed_hex': f'0x{plan.seed:08X}',
+                     'interval_min_us': plan.minimum, 'interval_max_us': plan.maximum,
+                     'injection_duration_s': plan.duration, 'pulse_width_us_nominal': 8,
+-                    'ideal_pulses': ideal_pulses(plan.seed, plan.minimum, plan.maximum, plan.duration)},
++                    'ideal_pulses': ideal_pulses(plan.seed, plan.minimum, plan.maximum, plan.duration, plan.profile)},
+         'firmware_expected': VERSION,
+     }
+     (folder / 'metadata.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False), encoding='utf-8')
+@@ -410,6 +420,11 @@
+             'interval_min_us': plan.minimum, 'interval_max_us': plan.maximum,
+             'seed': f'0x{plan.seed:08x}', 'pulse_us': 8,
+         })
++        if plan.profile == 'PHASE20':
++            check_fields(phase['NOISE_START'], {
++                'strategy': 'phase_scan', 'phase_shift_us': 500,
++                'phase_hold_pulses': 50,
++            })
+         for e in ('NOISE_END', 'TEST_END'):
+             check_fields(phase[e], {'run_id': plan.run})
+         start_us = phase['NOISE_START']['timestamp_us']
+@@ -420,7 +435,7 @@
+         end_detail = phase['TEST_END']['detail']
+         recorded = int(end_detail['pulses'])
+         missed = int(end_detail['missed_deadlines'])
+-        ideal = ideal_pulses(plan.seed, plan.minimum, plan.maximum, plan.duration)
++        ideal = ideal_pulses(plan.seed, plan.minimum, plan.maximum, plan.duration, plan.profile)
+         if missed != 0:
+             raise RuntimeError(f'O Pico perdeu {missed} prazos de agendamento.')
+         if recorded != ideal:
+@@ -519,7 +534,7 @@
+ 
+ 
+ def main():
+-    parser = argparse.ArgumentParser(description='Campanha CAN, parametros Pico v1.5 e politica do Node A verificada')
++    parser = argparse.ArgumentParser(description='Campanha CAN, parametros Pico v1.6 phase20 e politica do Node A verificada')
+     parser.add_argument('--plan', type=Path, default=Path(__file__).with_name('plano_oficial_CAN_runs_153_188.csv'))
+     parser.add_argument('--node-a', default='/dev/ttyUSB0')
+     parser.add_argument('--node-b', default='/dev/ttyACM0')
+@@ -533,6 +548,7 @@
+     parser.add_argument('--between', type=float, default=3.0,
+                         help='Pausa em segundos entre ensaios (padrao: 3).')
+     parser.add_argument('--dry-run', action='store_true', help='Confere plano sem abrir hardware.')
++    parser.add_argument('--execute', action='store_true', help='Permite abrir hardware explicitamente.')
+     args = parser.parse_args()
+     try:
+         plans = load_plan(args.plan)
+@@ -543,10 +559,10 @@
+         print(f'Plano: {args.plan}; {len(selected)} ensaio(s)')
+         for p in selected:
+             print(f'  Run {p.run}: {p.profile}, {p.duration}s, seed=0x{p.seed:08X}, '
+-                  f'{p.minimum}-{p.maximum} us, {ideal_pulses(p.seed,p.minimum,p.maximum,p.duration)} pulsos ideais, '
++                  f'{p.minimum}-{p.maximum} us, {ideal_pulses(p.seed,p.minimum,p.maximum,p.duration,p.profile)} pulsos ideais, '
+                   f'{p.condition}, bloco {p.block}')
+-        if args.dry_run:
+-            print('Plano valido; nenhum dispositivo foi acessado.')
++        if args.dry_run or not args.execute:
++            print('Plano valido; nenhum dispositivo foi acessado. Para executar e preciso --execute.')
+             return 0
+         policies = {p.condition for p in selected}
+         if len(policies) != 1:

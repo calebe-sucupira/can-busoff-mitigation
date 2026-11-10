@@ -1,0 +1,45 @@
+{
+  "test": "stop_baseline",
+  "diagnostic_run": 900001,
+  "port": "/dev/ttyACM1",
+  "events": [
+    {
+      "timestamp_us": "5785844328",
+      "event": "STATUS",
+      "detail": "firmware=pico-param-v1.5;state=IDLE;run_id=196;profile=ALTO;interval_min_us=9375;interval_max_us=14375;seed=0x02ae6661;injection_us=40000000"
+    },
+    {
+      "timestamp_us": "5785846544",
+      "event": "CONFIG_OK",
+      "detail": "run_id=900001;profile=BAIXO;interval_min_us=40000;interval_max_us=60000;seed=0xea125c50;injection_us=5000000"
+    },
+    {
+      "timestamp_us": "5785847976",
+      "event": "COMMAND",
+      "detail": "TEST_REQUEST"
+    },
+    {
+      "timestamp_us": "5785848181",
+      "event": "TEST_START",
+      "detail": "run_id=900001;profile=BAIXO;baseline_us=5000000;injection_us=5000000;recovery_us=5000000"
+    },
+    {
+      "timestamp_us": "5785849556",
+      "event": "COMMAND",
+      "detail": "STOP_REQUEST"
+    },
+    {
+      "timestamp_us": "5785849736",
+      "event": "TEST_ABORTED",
+      "detail": "run_id=900001;pulses=0;missed_deadlines=0;max_late_us=0"
+    },
+    {
+      "timestamp_us": "5785850643",
+      "event": "STATUS",
+      "detail": "firmware=pico-param-v1.5;state=IDLE;run_id=900001;profile=BAIXO;interval_min_us=40000;interval_max_us=60000;seed=0xea125c50;injection_us=5000000"
+    }
+  ],
+  "sent_start": true,
+  "sent_stop": true,
+  "time_utc": "2026-10-18T20:55:20.959947+00:00"
+}

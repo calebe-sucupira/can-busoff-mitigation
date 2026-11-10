@@ -1,0 +1,3 @@
+run_previsto,bloco,condicao,throttling_esperado,perfil,intervalo_min_us,intervalo_max_us,seed_hex,duracao_injecao_s,pulsos_ideais_previstos,natureza
+189,1,REFERENCIA,0,ALTO,9375,14375,0xB311D9E4,40,,EXEMPLO_NAO_APROVADO
+190,1,ADAPTATIVO,1,ALTO,9375,14375,0xB311D9E4,40,,EXEMPLO_NAO_APROVADO

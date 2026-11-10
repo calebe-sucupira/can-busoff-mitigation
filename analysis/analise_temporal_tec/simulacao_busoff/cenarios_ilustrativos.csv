@@ -1,0 +1,13 @@
+tec_inicial,eventos_error_por_100ms,modo,tempo_para_256_s,tec_ao_encerrar_modelo
+96,0,REFERENCIA,nao em 60 s,0
+96,0,REATIVO,nao em 60 s,0
+96,1,REFERENCIA,nao em 60 s,0
+96,1,REATIVO,3.5,261
+96,2,REFERENCIA,2.7,258
+96,2,REATIVO,1.3,264
+128,0,REFERENCIA,nao em 60 s,0
+128,0,REATIVO,nao em 60 s,0
+128,1,REFERENCIA,nao em 60 s,0
+128,1,REATIVO,2.4,260
+128,2,REFERENCIA,2.2,260
+128,2,REATIVO,1.0,263
