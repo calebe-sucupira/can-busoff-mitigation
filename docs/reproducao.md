@@ -65,6 +65,12 @@ python3 experiments/busoff/executar_campanha_CAN_phase20.py \
 
 O executor individual PHASE20 preserva seu hash original porque o orquestrador confere esse arquivo antes da execucao. Por isso seu argumento `--plan` deve ser explicitado; seu valor padrao historico aponta para um plano de outra campanha.
 
+## Conjunto de dados publicado
+
+Os 100 ensaios definitivos são disponibilizados como ZIPs individuais: 153–188 e 197–220 em `data/zips/`, e 304–343 em `data/busoff_estudo_2026/zips/`. Cada ZIP contém os arquivos brutos da execução. As cópias descompactadas e os pacotes consolidados redundantes não integram o repositório atual.
+
+Os ZIPs dos pilotos 300 e 303 são conservados separadamente dos 100 ensaios porque a função `verify_pilots()` do orquestrador de Bus-Off os exige antes de uma nova execução física usando o diretório padrão. Esses pilotos não integram as estatísticas finais.
+
 ## Rastreabilidade dos binarios historicos
 
 A versao historica de `experiments/characterization/complementary/binarios_node_a_complementar/manifesto_binarios.json` conserva caminhos absolutos existentes na maquina durante a coleta. Esses caminhos **nao sao referencias validas para o novo layout** e foram mantidos intocados para preservar o registro historico. Localizacoes atuais:

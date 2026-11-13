@@ -1,8 +1,0 @@
-{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792519142913124664, "name": "node_a", "port": "/dev/ttyUSB0"}
-{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792519142915442140, "name": "node_b", "port": "/dev/ttyACM0"}
-{"event": "DEVICE_CONNECTED", "host_timestamp_ns": 1792519142917926541, "name": "pico", "port": "/dev/ttyACM1"}
-{"event": "STATUS_SENT", "host_timestamp_ns": 1792519144919964291}
-{"event": "CONFIG_SENT", "host_timestamp_ns": 1792519144924017447, "command": "CFG,325,PHASE20,20000,20000,6D2B79F5,40"}
-{"event": "NODE_A_MODE_VERIFIED", "host_timestamp_ns": 1792519144926904495, "throttling": 1, "condition": "ADAPTATIVO"}
-{"event": "START_SENT", "host_timestamp_ns": 1792519144927021344}
-{"event": "STOP_RESULT", "host_timestamp_ns": 1792519163943824517, "reason": "Node A: STATE_CHANGE PASSIVE->BUS_OFF", "sent": true, "acknowledged": true, "idle": true}
