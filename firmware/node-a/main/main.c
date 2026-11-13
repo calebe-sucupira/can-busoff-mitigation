@@ -216,7 +216,7 @@ static bool error_callback(twai_node_handle_t handle,
     event.error.flags = edata->err_flags.val;
     BaseType_t woken = pdFALSE;
     send_event_from_isr(&event, &woken);
-    return woken == pdTRUE;
+    return woken == pdTRUE;46
 }
 
 static void producer_task(void *arg)
@@ -512,15 +512,15 @@ void app_main(void)
 
     BaseType_t rc;
     rc = xTaskCreatePinnedToCore(event_task, "event_task", 4096, NULL,
-                                 3, NULL, APP_CORE);
+                                 1, NULL, APP_CORE);
     configASSERT(rc == pdPASS);
     rc = xTaskCreatePinnedToCore(monitor_task, "monitor_task", 4096, NULL,
-                                 6, NULL, APP_CORE);
+                                 4, NULL, APP_CORE);
     configASSERT(rc == pdPASS);
     rc = xTaskCreatePinnedToCore(transmitter_task, "transmitter_task", 4096,
-                                 NULL, 5, &transmitter_task_handle, APP_CORE);
+                                 NULL, 3, &transmitter_task_handle, APP_CORE);
     configASSERT(rc == pdPASS);
     rc = xTaskCreatePinnedToCore(producer_task, "producer_task", 4096,
-                                 NULL, 4, NULL, APP_CORE);
+                                 NULL, 2, NULL, APP_CORE);
     configASSERT(rc == pdPASS);
 }
