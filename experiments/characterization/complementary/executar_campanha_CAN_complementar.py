@@ -399,7 +399,7 @@ def run_one(plan, args):
 
 def main():
     parser = argparse.ArgumentParser(description='Campanha CAN, parametros Pico v1.5 e politica do Node A verificada')
-    parser.add_argument('--plan', type=Path, default=Path(__file__).with_name('plano_oficial_CAN_runs_153_188.csv'))
+    parser.add_argument('--plan', type=Path, default=Path(__file__).with_name('plano_ampliacao_24_ensaios_CAN_runs_197_220.csv'))
     parser.add_argument('--node-a', default='/dev/ttyUSB0')
     parser.add_argument('--node-b', default='/dev/ttyACM0')
     parser.add_argument('--pico', default='/dev/ttyACM1')
@@ -412,6 +412,7 @@ def main():
     parser.add_argument('--between', type=float, default=3.0,
                         help='Pausa em segundos entre ensaios (padrao: 3).')
     parser.add_argument('--dry-run', action='store_true', help='Confere plano sem abrir hardware.')
+    parser.add_argument('--execute', action='store_true', help='Autoriza acesso explicito a bancada.')
     args = parser.parse_args()
     try:
         plans = load_plan(args.plan)
@@ -424,8 +425,8 @@ def main():
             print(f'  Run {p.run}: {p.profile}, {p.duration}s, seed=0x{p.seed:08X}, '
                   f'{p.minimum}-{p.maximum} us, {ideal_pulses(p.seed,p.minimum,p.maximum,p.duration)} pulsos ideais, '
                   f'{p.condition}, bloco {p.block}')
-        if args.dry_run:
-            print('Plano valido; nenhum dispositivo foi acessado.')
+        if args.dry_run or not args.execute:
+            print('Plano valido; nenhum dispositivo foi acessado. Para executar use --execute.')
             return 0
         policies = {p.condition for p in selected}
         if len(policies) != 1:

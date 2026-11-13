@@ -45,7 +45,7 @@ A campanha de Bus-Off também utilizou uma variante do firmware do Nó A com reg
 
 Os 60 ensaios compreendem as execuções **153–188** e **197–220**. Os 40 ensaios de progressão compreendem **304–343**. Os ensaios **300 e 303** são preliminares e não integram a amostra de 40. Registros brutos, arquivos de execução e hashes de binários foram conservados para conferência dos resultados.
 
-Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos.
+Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos. Para compilar a partir de um clone limpo, consulte [docs/reproducao.md](docs/reproducao.md).
 
 ## Tecnologias
 

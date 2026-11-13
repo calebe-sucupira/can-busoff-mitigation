@@ -38,6 +38,8 @@ jobs:
         run: |
           python3 experiments/characterization/initial/executar_campanha_CAN.py --dry-run
           python3 experiments/characterization/complementary/executar_campanha_CAN_complementar.py --plan experiments/characterization/complementary/plano_ampliacao_24_ensaios_CAN_runs_197_220.csv --dry-run
+          python3 experiments/characterization/complementary/executar_campanha_CAN_complementar.py
+          python3 experiments/busoff/executar_campanha_CAN_phase20.py --plan experiments/busoff/plano_campanha_phase20_40_runs.csv --dry-run
           python3 experiments/busoff/executar_campanha_integral_phase20.py --dry-run
 
       - name: Conferir dados preservados

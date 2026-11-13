@@ -126,7 +126,7 @@ def main():
                        '--from-run', str(group[0].run), '--to-run', str(group[-1].run),
                        '--node-a', args.node_a, '--node-b', args.node_b,
                        '--pico', args.pico, '--output', str(args.output),
-                       '--node-a-binary', str(image_path), '--between', str(args.between)]
+                       '--node-a-binary', str(image_path), '--between', str(args.between), '--execute']
                 subprocess.run(cmd, check=True)
                 entry['status'] = 'concluido'
             except (subprocess.CalledProcessError, KeyboardInterrupt) as e:

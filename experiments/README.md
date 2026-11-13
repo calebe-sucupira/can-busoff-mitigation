@@ -39,3 +39,16 @@ Os ensaios 300 e 303 foram preliminares. Apenas 304–343 integram a amostra pri
 Os ZIPs da raiz foram movidos para `../data/archives/`. Os registros dos pilotos foram organizados em `../data/pilots/`. Nenhum dado bruto da amostra principal foi retirado.
 
 Antes de uma nova aquisição física, confira as portas seriais, a compilação dos firmwares, a configuração da bancada e as condições elétricas. Os comandos de verificação acima não acionam o injetor.
+
+## Invocacao direta segura
+
+O executor PHASE20 individual conserva o SHA-256 exigido pelo orquestrador historico. O caminho padrao herdado para o plano nao corresponde a este diretorio; informe sempre o plano explicitamente:
+
+```bash
+python3 experiments/busoff/executar_campanha_CAN_phase20.py \
+  --plan experiments/busoff/plano_campanha_phase20_40_runs.csv --dry-run
+
+python3 experiments/characterization/complementary/executar_campanha_CAN_complementar.py --dry-run
+```
+
+Os comandos acima apenas validam planos e nao abrem portas seriais. Para a campanha complementar, a execucao fisica direta exige agora `--execute`, e o orquestrador encaminha essa autorizacao explicitamente quando invocado com `--execute`. A alteracao afeta apenas o controle de invocacao, nao a logica de geracao de pulsos ou o conteudo das coletas historicas.

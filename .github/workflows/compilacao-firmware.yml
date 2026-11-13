@@ -1,0 +1,63 @@
+name: Compilacao limpa dos firmwares
+
+on:
+  push:
+    branches:
+      - main
+      - chore/organizar-repositorio-tcc
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  esp32:
+    name: ESP-IDF v6.0.2 / ${{ matrix.projeto }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        projeto: [node-a, node-b]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar para ESP32
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v6.0.2
+          target: esp32
+          path: firmware/${{ matrix.projeto }}
+      - name: Verificar tick de 1 ms
+        run: grep -qx 'CONFIG_FREERTOS_HZ=1000' firmware/${{ matrix.projeto }}/sdkconfig
+
+  rp2040:
+    name: Raspberry Pi Pico SDK 2.2.0 / dois firmwares
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Obter Pico SDK e submodulos
+        uses: actions/checkout@v4
+        with:
+          repository: raspberrypi/pico-sdk
+          ref: 2.2.0
+          path: _ci/pico-sdk
+          submodules: recursive
+      - name: Instalar toolchain ARM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+      - name: Compilar injetor parametrizavel
+        env:
+          PICO_SDK_PATH: ${{ github.workspace }}/_ci/pico-sdk
+        run: |
+          cmake -S firmware/pico-injector -B "$RUNNER_TEMP/pico-param" -G Ninja -DPICO_BOARD=pico
+          cmake --build "$RUNNER_TEMP/pico-param"
+      - name: Preparar e compilar variante PHASE20
+        env:
+          PICO_SDK_PATH: ${{ github.workspace }}/_ci/pico-sdk
+        run: |
+          python3 experiments/busoff/preparar_workspace_phase20.py --repo . --output "$RUNNER_TEMP/pico-phase20"
+          cmake -S "$RUNNER_TEMP/pico-phase20" -B "$RUNNER_TEMP/pico-phase20-build" -G Ninja -DPICO_BOARD=pico
+          cmake --build "$RUNNER_TEMP/pico-phase20-build"
