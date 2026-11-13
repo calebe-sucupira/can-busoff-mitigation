@@ -33,3 +33,6 @@ venv/
 # Dados locais e workspaces de compilação
 /data/raw/
 /experiments/characterization/complementary/binarios_node_a_complementar/workspaces/
+
+# Relatorios e scripts exploratorios locais
+/analysis/

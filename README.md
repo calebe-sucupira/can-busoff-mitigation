@@ -35,9 +35,8 @@ No segundo anterior ao Bus-Off, a média de transmissões concluídas foi de **9
 | `hardware/` | Projetos KiCad das duas placas e bibliotecas |
 | `experiments/characterization/` | Executores e planos dos 60 ensaios |
 | `experiments/busoff/` | Código e plano dos 40 ensaios de progressão |
-| `analysis/` | Scripts, tabelas e verificações dos dados |
-| `data/` | Registros originais, ensaios preliminares e pacotes compactados |
-| `docs/` | Documentação de fabricação |
+| `data/` | Registros originais, pilotos e arquivos compactados dos ensaios |
+| `docs/` | Documentação de fabricação e compilação |
 
 O código do injetor para a campanha de progressão até Bus-Off está em `experiments/busoff/main_phase20.c` e `experiments/busoff/injector.pio`; é distinto do firmware parametrizável da caracterização.
 
@@ -46,18 +45,6 @@ A campanha de Bus-Off também utilizou uma variante do firmware do Nó A com reg
 Os 60 ensaios compreendem as execuções **153–188** e **197–220**. Os 40 ensaios de progressão compreendem **304–343**. Os ensaios **300 e 303** são preliminares e não integram a amostra de 40. Registros brutos, arquivos de execução e hashes de binários foram conservados para conferência dos resultados.
 
 Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos. Para compilar a partir de um clone limpo, consulte [docs/reproducao.md](docs/reproducao.md).
-
-## Auditoria dos registros
-
-Os arquivos publicados podem ser conferidos sem hardware:
-
-```bash
-python3 analysis/validar_integridade_campanhas.py
-```
-
-O verificador examina os 60 ZIPs de caracterizacao, os 40 conjuntos de progressao ate Bus-Off, CRCs, hashes registrados, modos de inicializacao e confirmacoes de parada do Pico. Na campanha de Bus-Off, `qc.valid=false` corresponde ao encerramento antecipado ao observar o estado critico; a auditoria exige evidencia explicita de Bus-Off, STOP, ACK e IDLE.
-
-A auditoria tambem recalcula os tempos medios de entrada em Bus-Off e as transmissoes concluidas no segundo anterior a ele. A consistencia dos hashes de metadados **nao** comprova equivalencia de compilacoes historicas nem a identidade do binario efetivamente gravado. Veja [docs/reproducao.md](docs/reproducao.md) para compilacao e limitacoes.
 
 ## Tecnologias
 
