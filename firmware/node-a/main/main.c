@@ -216,7 +216,7 @@ static bool error_callback(twai_node_handle_t handle,
     event.error.flags = edata->err_flags.val;
     BaseType_t woken = pdFALSE;
     send_event_from_isr(&event, &woken);
-    return woken == pdTRUE;46
+    return woken == pdTRUE;
 }
 
 static void producer_task(void *arg)

@@ -1,27 +1,35 @@
-# Build directories
+# Compilação
 build/
 **/build/
-
-# ESP-IDF
+**/_compilacao_*/
+managed_components/
+dependencies.lock
 sdkconfig
 sdkconfig.old
-dependencies.lock
-managed_components/
+**/CMakeFiles/
+**/CMakeCache.txt
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
 .venv/
 venv/
 
-# Editors
+# Editores e arquivos temporários
 .vscode/
 .idea/
-
-# Temporary files
+**/.history/
+**/*.kicad_prl
+**/*.bak
+**/~*.lck
 *~
 .DS_Store
 
-**/.history/
-**/~*.lck
-data/raw/
+# Evitar novas cópias ZIP na raiz
+/*.zip
+
+# Dados locais e workspaces de compilação
+/data/raw/
+/experiments/characterization/complementary/binarios_node_a_complementar/workspaces/
