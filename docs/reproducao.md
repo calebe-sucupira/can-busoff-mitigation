@@ -30,11 +30,13 @@ Os dois projetos possuem `sdkconfig.defaults` com `CONFIG_FREERTOS_HZ=1000`, nec
 O firmware do No A tem `ENABLE_THROTTLING=0` por padrao. **Compilar dessa forma nao testa a variante adaptativa.** Para compilar as duas variantes em diretorios isolados, depois de gerar o `sdkconfig` de No A, use:
 
 ```bash
-python3 experiments/characterization/complementary/preparar_binarios_node_a.py \
+python3 experiments/characterization/complementary/compilar_binarios.py \
   --project firmware/node-a --output /tmp/binarios_node_a_reproducao --build
 ```
 
-Esse procedimento cria novas imagens e um manifesto novo; nao substitua as imagens nem o manifesto da campanha de outubro. Um clone limpo nao contem o `sdkconfig` historico integral, logo os hashes dos aplicativos antigos nao devem ser exigidos das novas compilacoes.
+Esse procedimento cria novas imagens e um registro novo; nao substitua as imagens nem o registro da campanha de outubro. Um clone limpo nao contem o `sdkconfig` historico integral, logo os hashes dos aplicativos antigos nao devem ser exigidos das novas compilacoes.
+
+Os dois arquivos `node_a_referencia.bin` e `node_a_adaptativo.bin` em `experiments/characterization/complementary/binarios/` são artefatos históricos. Para novas compilações, escolha um diretório de saída separado; não substitua essas imagens.
 
 ## RP2040: injetor parametrizavel e variante PHASE20
 
@@ -56,8 +58,8 @@ cmake --build /tmp/build-pico-phase20
 
 ```bash
 python3 -m compileall -q experiments
-python3 experiments/characterization/initial/executar_campanha_CAN.py --dry-run
-python3 experiments/characterization/complementary/executar_campanha_CAN_complementar.py --dry-run
+python3 experiments/characterization/initial/executar_campanha.py --dry-run
+python3 experiments/characterization/complementary/coletar_ensaios.py --dry-run
 python3 experiments/busoff/executar_campanha_integral_phase20.py --dry-run
 python3 experiments/busoff/executar_campanha_CAN_phase20.py \
   --plan experiments/busoff/plano_campanha_phase20_40_runs.csv --dry-run
@@ -73,12 +75,12 @@ Os ZIPs dos pilotos 300 e 303 são conservados separadamente dos 100 ensaios por
 
 ## Rastreabilidade dos binarios historicos
 
-A versao historica de `experiments/characterization/complementary/binarios_node_a_complementar/manifesto_binarios.json` conserva caminhos absolutos existentes na maquina durante a coleta. Esses caminhos **nao sao referencias validas para o novo layout** e foram mantidos intocados para preservar o registro historico. Localizacoes atuais:
+A versao historica de `experiments/characterization/complementary/binarios/registro_binarios.json` conserva caminhos absolutos existentes na maquina durante a coleta. Esses caminhos **nao sao referencias validas para o novo layout** e foram mantidos intocados para preservar o registro historico. Localizacoes atuais:
 
 | Condicao | Caminho atual relativo ao repositorio | SHA-256 historico |
 | --- | --- | --- |
-| REFERENCIA | `experiments/characterization/complementary/binarios_node_a_complementar/node_a_referencia.bin` | `559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e` |
-| ADAPTATIVO | `experiments/characterization/complementary/binarios_node_a_complementar/node_a_adaptativo.bin` | `e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db` |
+| REFERENCIA | `experiments/characterization/complementary/binarios/node_a_referencia.bin` | `559b0773e025a2639186503acd75b3ccc30ea7caebbe966ae457a0d65ce0dd6e` |
+| ADAPTATIVO | `experiments/characterization/complementary/binarios/node_a_adaptativo.bin` | `e65d74af829c0307988542a2483300d2f8435a9674dafce1c9b1495da56cf3db` |
 
 A variante de telemetria do No A usada nas execucoes 304–343 esta preservada como `experiments/busoff/node_a_busoff_trace.c`. O workspace historico externo `_compilacao_telemetria_busoff_2026-10-20` nao integra o clone; recompilar essa variante requer preparar novamente um workspace independente e nao reproduz automaticamente os hashes registrados nos ensaios.
 

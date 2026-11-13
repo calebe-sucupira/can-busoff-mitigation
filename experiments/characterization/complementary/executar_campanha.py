@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Orquestra grupos CAN com binarios precompilados. Dry-run e o padrao."""
+"""Executa grupos CAN com binarios precompilados. Dry-run e o padrao."""
 import argparse
 import hashlib
 import importlib.util
@@ -10,7 +10,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from executar_campanha_CAN_complementar import load_plan
+from coletar_ensaios import load_plan
 
 
 def sha256(path):
@@ -98,7 +98,7 @@ def main():
                 raise ValueError(f'Run {p.run} ja possui dados; nao sobrescrever.')
         args.output.mkdir(parents=True, exist_ok=True)
         stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-        manifest_path = args.output / f'orquestracao_{stamp}.json'
+        manifest_path = args.output / f'execucao_{stamp}.json'
         manifest = {'started_utc': datetime.now(timezone.utc).isoformat(),
                     'plan': str(args.plan.resolve()),
                     'node_a_port': args.node_a,
@@ -107,7 +107,7 @@ def main():
                                  for mode, path in paths.items()},
                     'groups': []}
         manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
-        runner = Path(__file__).with_name('executar_campanha_CAN_complementar.py')
+        runner = Path(__file__).with_name('coletar_ensaios.py')
         for i, group in enumerate(groups, 1):
             mode = group[0].condition
             image_path = paths[mode]
@@ -137,7 +137,7 @@ def main():
                 entry['finished_utc'] = datetime.now(timezone.utc).isoformat()
                 manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
         print('\nLote complementar concluido. Confira QC de cada run.')
-        print(f'Manifesto: {manifest_path}')
+        print(f'Registro da execucao: {manifest_path}')
         return 0
     except (ValueError, RuntimeError, OSError) as exc:
         print(f'ERRO: {exc}', file=sys.stderr)
