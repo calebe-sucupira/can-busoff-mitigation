@@ -13,8 +13,6 @@ git clone https://github.com/calebe-sucupira/can-busoff-mitigation.git
 cd can-busoff-mitigation
 ```
 
-Use a branch de validacao enquanto o PR estiver aberto: `git switch chore/organizar-repositorio-tcc`.
-
 ## ESP32: No A e No B
 
 Ative previamente o ambiente do ESP-IDF v6.0.2:
@@ -57,7 +55,7 @@ cmake --build /tmp/build-pico-phase20
 ## Checagens sem hardware
 
 ```bash
-python3 -m compileall -q analysis experiments
+python3 -m compileall -q experiments
 python3 experiments/characterization/initial/executar_campanha_CAN.py --dry-run
 python3 experiments/characterization/complementary/executar_campanha_CAN_complementar.py --dry-run
 python3 experiments/busoff/executar_campanha_integral_phase20.py --dry-run
@@ -80,4 +78,4 @@ A variante de telemetria do No A usada nas execucoes 304–343 esta preservada c
 
 ## Limites da validacao
 
-Os fluxos de GitHub Actions testam sintaxe, logica offline, planos, integridade basica dos arquivos e compilacao de firmware. A compilacao automatica nao mede pulsos no osciloscopio, nao verifica a instrumentacao eletrica nem demonstra que novos binarios reproduzem o mesmo comportamento dos experimentos. Nao grave dispositivos ou acione o injetor durante a verificacao de software.
+O GitHub Actions verifica a compilacao dos firmwares ESP32 e RP2040. Os comandos `--dry-run` mostrados acima conferem os planos sem acessar dispositivos. A compilacao automatica nao mede pulsos no osciloscopio, nao verifica a instrumentacao eletrica nem demonstra que novos binarios reproduzem o mesmo comportamento dos experimentos. Nao grave dispositivos ou acione o injetor durante a verificacao de software.
