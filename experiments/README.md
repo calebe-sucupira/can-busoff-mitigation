@@ -7,7 +7,6 @@ Os scripts utilizados nas coletas foram mantidos sem alterações de lógica. A 
 - `characterization/initial/`: plano e executor dos ensaios 153–188.
 - `characterization/complementary/`: plano, executor e binários associados aos ensaios 197–220.
 - Arquivos das execuções: `../data/zips/`.
-- Métricas consolidadas: `../analysis/avaliacao_campanha_60_runs/`.
 
 Conferência do primeiro plano sem acessar os dispositivos:
 
@@ -15,7 +14,7 @@ Conferência do primeiro plano sem acessar os dispositivos:
 python3 experiments/characterization/initial/executar_campanha_CAN.py --dry-run
 ```
 
-As etapas inicial e complementar possuem hashes de binários distintos. A documentação de proveniência está em `../analysis/auditoria_proveniencia_CAN_60/`.
+As etapas inicial e complementar possuem hashes de binários distintos, registrados nos metadados das execuções. Os resultados principais estão resumidos no [README do projeto](../README.md).
 
 ## Progressão até Bus-Off (40 ensaios)
 

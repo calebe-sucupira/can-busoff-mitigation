@@ -1,7 +1,0 @@
-profile,policy,n,tec_peak_mean,tec_peak_sd,tec_peak_range,runs_tec_ge_96,runs_tec_ge_128,a_error_alerts_total,a_error_alerts_mean,a_tx_success_total,a_tx_success_mean,a_error_alerts_per_1000_tx_success,b_error_alerts_total,b_received_total,b_error_alerts_per_1000_rx,passive_entries_total,passive_time_total_s,runs_passive,gap_total_run,runs_gap_positive,busoff_total
-BAIXO,REFERENCIA,6,38.1667,14.6481,24-64,0,0,587,97.8333,23998,3999.6667,24.4604,313,23996,13.0438,0,0,0,0,0,0
-BAIXO,ADAPTATIVO,6,33.5,2.429,29-36,0,0,560,93.3333,24002,4000.3333,23.3314,293,23994,12.2114,0,0,0,0,0,0
-MEDIO_V2,REFERENCIA,6,81,25.7449,54-129,1,1,1469,244.8333,24002,4000.3333,61.2032,764,23993,31.8426,1,0.009435,1,0,0,0
-MEDIO_V2,ADAPTATIVO,6,87.1667,9.6419,78-102,2,0,1449,241.5,23989,3998.1667,60.4027,757,23984,31.5627,0,0,0,10,1,0
-ALTO,REFERENCIA,6,133.1667,7.9352,124-143,6,4,2456,409.3333,24004,4000.6667,102.3163,1271,23996,52.9672,18,0.969461,4,0,0,0
-ALTO,ADAPTATIVO,6,132.6667,13.866,113-144,6,4,2343,390.5,22427,3737.8333,104.4723,1238,22418,55.2235,20,6.924635,4,1625,6,0
