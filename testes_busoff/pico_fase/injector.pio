@@ -1,7 +1,0 @@
-.program injector
-
-.wrap_target
-    pull block
-    set pindirs, 1 [7]
-    set pindirs, 0
-.wrap
