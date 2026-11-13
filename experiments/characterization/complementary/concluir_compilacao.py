@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Finaliza as duas compilacoes concluidas sem recompilar nem gravar hardware.
 
-Coloque ao lado de preparar_binarios_node_a.py, na pasta da automacao v2.
+Use com compilar_binarios.py quando os dois workspaces ja foram compilados.
 Esta versao requer que ambos os workspaces ja tenham sido compilados.
 """
 import argparse
@@ -11,7 +11,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from preparar_binarios_node_a import (APPS, MODES, check_sources, sha256,
+from compilar_binarios import (APPS, MODES, check_sources, sha256,
                                        verify_build)
 
 SUPPORT_FILES = ('bootloader/bootloader.bin', 'partition_table/partition-table.bin')
@@ -52,7 +52,7 @@ def main():
         description='Recupera e valida binarios dos dois workspaces ja compilados, sem novo build.')
     parser.add_argument('--project', required=True, type=Path, help='firmware/node-a')
     parser.add_argument('--output', type=Path,
-                        default=Path('binarios_node_a_complementar'))
+                        default=Path('build/variantes_node_a'))
     args = parser.parse_args()
     project = args.project.expanduser().resolve()
     outdir = args.output.expanduser().resolve()
@@ -123,17 +123,17 @@ def main():
             'note': ('Compilacoes recuperadas sem rebuild. Nenhuma gravacao realizada. '
                      'Validar boot e modo de cada binario antes de qualquer teste fisico.'),
         }
-        manifest_path = outdir / 'manifesto_binarios.json'
+        manifest_path = outdir / 'registro_binarios.json'
         if manifest_path.exists():
             old = read_json(manifest_path)
             if old.get('source_sha256') != digest or \
                any(old.get('images', {}).get(n, {}).get('sha256') != builds[n]['sha256'] for n in MODES):
-                raise ValueError('Manifesto anterior tem hashes diferentes; nada sera sobrescrito.')
-            print(f'Manifesto valido existente: {manifest_path}')
+                raise ValueError('Registro anterior tem hashes diferentes; nada sera sobrescrito.')
+            print(f'Registro valido existente: {manifest_path}')
         else:
             manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n',
                                      encoding='utf-8')
-            print(f'Manifesto gerado: {manifest_path}')
+            print(f'Registro gerado: {manifest_path}')
         print('VALIDACAO LOGICA CONCLUIDA. Nenhum arquivo foi recompilado ou gravado no ESP32.')
         return 0
     except (ValueError, RuntimeError, OSError, KeyError, json.JSONDecodeError) as exc:

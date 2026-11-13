@@ -89,3 +89,20 @@ jobs:
           python3 experiments/busoff/preparar_workspace_phase20.py --repo . --output "$RUNNER_TEMP/pico-phase20"
           cmake -S "$RUNNER_TEMP/pico-phase20" -B "$RUNNER_TEMP/pico-phase20-build" -G Ninja -DPICO_BOARD=pico
           cmake --build "$RUNNER_TEMP/pico-phase20-build"
+
+  scripts:
+    name: Conferir nomes e planos dos experimentos
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conferir sintaxe e planos sem dispositivos
+        run: |
+          python3 -m compileall -q experiments
+          python3 experiments/characterization/initial/executar_campanha.py --dry-run
+          python3 experiments/characterization/complementary/coletar_ensaios.py --dry-run
+          python3 experiments/characterization/complementary/executar_campanha.py \
+            --plan experiments/characterization/complementary/plano_24_ensaios.csv \
+            --reference-bin experiments/characterization/complementary/binarios/node_a_referencia.bin \
+            --adaptive-bin experiments/characterization/complementary/binarios/node_a_adaptativo.bin
+          python3 experiments/busoff/executar_campanha_integral_phase20.py --dry-run
