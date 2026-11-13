@@ -36,3 +36,11 @@ venv/
 
 # Relatorios e scripts exploratorios locais
 /analysis/
+
+# Saidas brutas e pacotes redundantes de campanhas
+/data/processed/
+/data/pilots/
+/data/archives/
+/data/busoff_estudo_2026/raw/
+/data/busoff_estudo_2026/campanha_integral_phase20_journal.jsonl
+/data/orquestracao_*.json

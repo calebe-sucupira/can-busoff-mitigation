@@ -1,4 +1,0 @@
-run_previsto,perfil,intervalo_min_us,intervalo_max_us,seed_hex,duracao_injecao_s,condicao,throttling_esperado,bloco,pulsos_ideais_previstos
-300,PHASE20,20000,20000,0x6D2B79F5,40,REFERENCIA,0,1,1999
-301,PHASE20,20000,20000,0x6D2B79F5,40,REFERENCIA,0,2,1999
-302,PHASE20,20000,20000,0x6D2B79F5,40,REFERENCIA,0,3,1999

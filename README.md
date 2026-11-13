@@ -35,14 +35,14 @@ No segundo anterior ao Bus-Off, a média de transmissões concluídas foi de **9
 | `hardware/` | Projetos KiCad das duas placas e bibliotecas |
 | `experiments/characterization/` | Executores e planos dos 60 ensaios |
 | `experiments/busoff/` | Código e plano dos 40 ensaios de progressão |
-| `data/` | Registros originais, pilotos e arquivos compactados dos ensaios |
+| `data/` | ZIPs dos 100 ensaios definitivos e dos dois pilotos de segurança da campanha Bus-Off |
 | `docs/` | Documentação de fabricação e compilação |
 
 O código do injetor para a campanha de progressão até Bus-Off está em `experiments/busoff/main_phase20.c` e `experiments/busoff/injector.pio`; é distinto do firmware parametrizável da caracterização.
 
 A campanha de Bus-Off também utilizou uma variante do firmware do Nó A com registros adicionais de telemetria. Seu código-fonte está preservado em `experiments/busoff/node_a_busoff_trace.c`, identificado nos logs pelo marcador `node-a-throttling-v1.3-busoff-trace`. O `firmware/node-a/` permanece como base geral do projeto.
 
-Os 60 ensaios compreendem as execuções **153–188** e **197–220**. Os 40 ensaios de progressão compreendem **304–343**. Os ensaios **300 e 303** são preliminares e não integram a amostra de 40. Registros brutos, arquivos de execução e hashes de binários foram conservados para conferência dos resultados.
+Os 60 ensaios compreendem as execuções **153–188** e **197–220**, armazenadas individualmente em `data/zips/`. Os 40 ensaios de progressão compreendem **304–343**, armazenados em `data/busoff_estudo_2026/zips/`. Os ZIPs incluem os arquivos de log, CSVs, metadados e controle de qualidade originais. As cópias descompactadas foram removidas para evitar duplicação. Os ZIPs dos pilotos **300 e 303** também foram mantidos porque o orquestrador os verifica antes da execução física; não integram a amostra de 40.
 
 Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos. Para compilar a partir de um clone limpo, consulte [docs/reproducao.md](docs/reproducao.md).
 

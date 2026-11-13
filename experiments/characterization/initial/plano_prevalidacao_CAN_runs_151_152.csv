@@ -1,3 +1,0 @@
-run_previsto,bloco,condicao,throttling_esperado,perfil,intervalo_min_us,intervalo_max_us,seed_hex,duracao_injecao_s,pulsos_ideais_previstos,natureza
-151,0,ADAPTATIVO,1,ALTO,9375,14375,0xCA2D51FF,40,3365,PILOTO_PREVALIDACAO
-152,0,REFERENCIA,0,ALTO,9375,14375,0xCA2D51FF,40,3365,PILOTO_PREVALIDACAO
