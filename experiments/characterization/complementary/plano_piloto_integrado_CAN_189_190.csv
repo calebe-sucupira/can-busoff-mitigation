@@ -1,3 +1,0 @@
-run_previsto,bloco,condicao,throttling_esperado,perfil,intervalo_min_us,intervalo_max_us,seed_hex,duracao_injecao_s,pulsos_ideais_previstos,natureza
-189,0,REFERENCIA,0,BAIXO,40000,60000,0xEA125C50,5,100,PILOTO_INTEGRADO_CURTO
-190,0,ADAPTATIVO,1,BAIXO,40000,60000,0xEA125C50,5,100,PILOTO_INTEGRADO_CURTO

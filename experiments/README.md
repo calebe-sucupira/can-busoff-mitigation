@@ -23,7 +23,7 @@ As etapas inicial e complementar possuem hashes de binários distintos, registra
 - `busoff/plano_campanha_phase20_40_runs.csv`: plano das execuções 304–343.
 - `busoff/main_phase20.c` e `busoff/injector.pio`: código do Pico nessa campanha.
 - `busoff/node_a_busoff_trace.c`: variante instrumentada do firmware do Nó A identificada nos logs de inicialização dos ensaios 304–343.
-- Registros: `../data/busoff_estudo_2026/raw/` e `../data/busoff_estudo_2026/zips/`.
+- Registros definitivos: `../data/busoff_estudo_2026/zips/` (Runs 304–343). Os ZIPs contêm os arquivos brutos.
 
 Conferência sem iniciar a bancada:
 
@@ -35,7 +35,7 @@ Os ensaios 300 e 303 foram preliminares. Apenas 304–343 integram a amostra pri
 
 ## Dados e reprodução
 
-Os ZIPs da raiz foram movidos para `../data/archives/`. Os registros dos pilotos foram organizados em `../data/pilots/`. Nenhum dado bruto da amostra principal foi retirado.
+O repositório contém um ZIP por ensaio definitivo: 60 em `../data/zips/` e 40 em `../data/busoff_estudo_2026/zips/`. Cada ZIP reúne os registros brutos e os metadados daquela execução. Para evitar duplicação, foram removidas as cópias descompactadas, os pacotes consolidados redundantes e os registros exploratórios. Os ZIPs dos pilotos 300 e 303 permanecem em `../data/busoff_estudo_2026/zips/` porque o orquestrador verifica esses dois pilotos antes de autorizar a campanha física.
 
 Antes de uma nova aquisição física, confira as portas seriais, a compilação dos firmwares, a configuração da bancada e as condições elétricas. Os comandos de verificação acima não acionam o injetor.
 
