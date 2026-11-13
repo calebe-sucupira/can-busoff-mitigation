@@ -47,6 +47,18 @@ Os 60 ensaios compreendem as execuções **153–188** e **197–220**. Os 40 en
 
 Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos. Para compilar a partir de um clone limpo, consulte [docs/reproducao.md](docs/reproducao.md).
 
+## Auditoria dos registros
+
+Os arquivos publicados podem ser conferidos sem hardware:
+
+```bash
+python3 analysis/validar_integridade_campanhas.py
+```
+
+O verificador examina os 60 ZIPs de caracterizacao, os 40 conjuntos de progressao ate Bus-Off, CRCs, hashes registrados, modos de inicializacao e confirmacoes de parada do Pico. Na campanha de Bus-Off, `qc.valid=false` corresponde ao encerramento antecipado ao observar o estado critico; a auditoria exige evidencia explicita de Bus-Off, STOP, ACK e IDLE.
+
+A auditoria tambem recalcula os tempos medios de entrada em Bus-Off e as transmissoes concluidas no segundo anterior a ele. A consistencia dos hashes de metadados **nao** comprova equivalencia de compilacoes historicas nem a identidade do binario efetivamente gravado. Veja [docs/reproducao.md](docs/reproducao.md) para compilacao e limitacoes.
+
 ## Tecnologias
 
 ESP-IDF 6.0.2, FreeRTOS, Raspberry Pi Pico SDK, PIO, C, Python 3 (pyserial) e KiCad.
