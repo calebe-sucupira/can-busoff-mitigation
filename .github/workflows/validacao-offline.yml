@@ -65,6 +65,9 @@ jobs:
 
           assert modes.count("REFERENCIA") == 20
           assert modes.count("ADAPTATIVO") == 20
+          trace = Path("experiments/busoff/node_a_busoff_trace.c")
+          assert trace.is_file()
+          assert '"node-a-throttling-v1.3-busoff-trace"' in trace.read_text()
           assert not Path("firmware.zip").exists()
           print("Planos, registros e arquivos compactados encontrados.")
           PY

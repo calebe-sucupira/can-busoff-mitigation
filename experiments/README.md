@@ -23,6 +23,7 @@ As etapas inicial e complementar possuem hashes de binários distintos. A docume
 - `busoff/executar_campanha_CAN_phase20.py`: executa e registra cada ensaio.
 - `busoff/plano_campanha_phase20_40_runs.csv`: plano das execuções 304–343.
 - `busoff/main_phase20.c` e `busoff/injector.pio`: código do Pico nessa campanha.
+- `busoff/node_a_busoff_trace.c`: variante instrumentada do firmware do Nó A identificada nos logs de inicialização dos ensaios 304–343.
 - Registros: `../data/busoff_estudo_2026/raw/` e `../data/busoff_estudo_2026/zips/`.
 
 Conferência sem iniciar a bancada:

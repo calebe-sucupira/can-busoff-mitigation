@@ -41,6 +41,8 @@ No segundo anterior ao Bus-Off, a média de transmissões concluídas foi de **9
 
 O código do injetor para a campanha de progressão até Bus-Off está em `experiments/busoff/main_phase20.c` e `experiments/busoff/injector.pio`; é distinto do firmware parametrizável da caracterização.
 
+A campanha de Bus-Off também utilizou uma variante do firmware do Nó A com registros adicionais de telemetria. Seu código-fonte está preservado em `experiments/busoff/node_a_busoff_trace.c`, identificado nos logs pelo marcador `node-a-throttling-v1.3-busoff-trace`. O `firmware/node-a/` permanece como base geral do projeto.
+
 Os 60 ensaios compreendem as execuções **153–188** e **197–220**. Os 40 ensaios de progressão compreendem **304–343**. Os ensaios **300 e 303** são preliminares e não integram a amostra de 40. Registros brutos, arquivos de execução e hashes de binários foram conservados para conferência dos resultados.
 
 Veja [experiments/README.md](experiments/README.md) para localizar os programas e planos.
