@@ -31,6 +31,35 @@ jobs:
       - name: Verificar tick de 1 ms
         run: grep -qx 'CONFIG_FREERTOS_HZ=1000' firmware/${{ matrix.projeto }}/sdkconfig
 
+  esp32-variantes:
+    name: ESP-IDF / ${{ matrix.variante }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        variante: [adaptativo, busoff-trace]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar copia isolada do No A
+        env:
+          VARIANTE: ${{ matrix.variante }}
+        run: |
+          mkdir -p _ci/node-a-variant
+          cp -a firmware/node-a/. _ci/node-a-variant/
+          if [ "$VARIANTE" = "busoff-trace" ]; then
+            cp experiments/busoff/node_a_busoff_trace.c _ci/node-a-variant/main/main.c
+          fi
+          printf '\ntarget_compile_definitions(${COMPONENT_LIB} PRIVATE ENABLE_THROTTLING=1)\n' >> _ci/node-a-variant/main/CMakeLists.txt
+      - name: Compilar variante adaptativa para ESP32
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v6.0.2
+          target: esp32
+          path: _ci/node-a-variant
+      - name: Conferir definicao do modo adaptativo
+        run: grep -q -- '-DENABLE_THROTTLING=1' _ci/node-a-variant/build/compile_commands.json
+
   rp2040:
     name: Raspberry Pi Pico SDK 2.2.0 / dois firmwares
     runs-on: ubuntu-24.04
