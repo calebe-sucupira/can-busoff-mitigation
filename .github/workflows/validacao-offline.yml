@@ -42,6 +42,9 @@ jobs:
           python3 experiments/busoff/executar_campanha_CAN_phase20.py --plan experiments/busoff/plano_campanha_phase20_40_runs.csv --dry-run
           python3 experiments/busoff/executar_campanha_integral_phase20.py --dry-run
 
+      - name: Auditar evidencias e valores das campanhas
+        run: python3 analysis/validar_integridade_campanhas.py
+
       - name: Conferir dados preservados
         run: |
           python3 - <<'PY'
